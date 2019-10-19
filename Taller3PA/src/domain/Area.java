@@ -6,7 +6,7 @@ package domain;
 /**Class Area to the system
  * @author ssp013
  *
- */s
+ */
 public class Area {
 	private String NameArea;
 	
