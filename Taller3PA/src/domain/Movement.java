@@ -7,10 +7,10 @@ package domain;
  * @author ssp013
  *
  */
-public class Movement {
-
+public abstract class Movement {
 	/**
-	 * 
+	 * Class to create Movement.
+	 * @params Rut, NameInstallation,DateIn,DateOut,HourIn,HourOut
 	 */
 	private String Rut;
 	private String NameInstallation;

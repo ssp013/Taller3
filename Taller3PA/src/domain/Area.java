@@ -2,14 +2,16 @@
  * 
  */
 package domain;
-
 /**Class Area to the system
  * @author ssp013
  *
  */
 public class Area {
+	/**
+	 * Class to create Area.
+	 * @params NameArea
+	 */
 	private String NameArea;
-	
 	/**
 	 * @param NameArea
 	 */
@@ -36,6 +38,4 @@ public class Area {
 	public String toString() {
 		return "Area [NameArea=" + NameArea + "]";
 	}
-	
-
 }

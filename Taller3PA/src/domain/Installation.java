@@ -1,12 +1,12 @@
 package domain;
 import logic.ListDepartment;
-/**Class instalation to the system
+/**Class Installation to the system
  * @author ssp013
  *
  */
 public class Installation {
 	/**
-	 * Class to create Instalation.
+	 * Class to create Installation.
 	 * @params nameInstalation, listDepartamentInstalation
 	 */
 	private String nameInstalation;//it's not necesary past to quantity to the list.

@@ -7,6 +7,10 @@ import logic.ListDepartment;
  *
  */
 public class Project{
+	/**
+	 * Class to create Project.
+	 * @params ProjectCode,ProjectName,TotalBudget,ResponsibleDepartment,NumberOfAreasOfExpertise
+	 */
 	private String ProjectCode;
 	private String ProjectName;
 	private int TotalBudget;

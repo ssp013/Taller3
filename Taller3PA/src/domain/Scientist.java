@@ -9,14 +9,10 @@ import logic.ListRegistry;
  * @author ssp013
  *
  */
-/**
- * @author ssp013
- *
- */
 public class Scientist {
 	/**
 	 * Class to create Scientist.
-	 * @params 
+	 * @params Rut,Name,LastName,MotherLastName,Area,AssociatedCost
 	 */
 	private String Rut;
 	private String Name;
@@ -26,7 +22,6 @@ public class Scientist {
 	private int AssociatedCost;
 	private ListProject listScientificProject;
 	private ListRegistry listRegistry;
-	
 	
 	/**
 	 * @param Rut

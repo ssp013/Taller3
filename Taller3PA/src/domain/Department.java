@@ -6,7 +6,7 @@ import logic.ListProject;
  */
 public class Department {
 	/**
-	 * Class to create Departament.
+	 * Class to create Department.
 	 * @params nameDepartament, budget,listDepartamentInstalation
 	 */
 	private String NameDepartament;
