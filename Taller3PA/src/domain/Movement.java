@@ -18,24 +18,37 @@ public abstract class Movement {
 	private String DateOut;
 	private String HourIn;
 	private String HourOut;
+	private String ProjectCode;
 	
+	
+
 	/**
-	 * @param Rut
-	 * @param NameInstallation
-	 * @param DateIn
-	 * @param DateOut
-	 * @param HourIn
-	 * @param HourOut
+	 * @param rut
+	 * @param nameInstallation
+	 * @param dateIn
+	 * @param dateOut
+	 * @param hourIn
+	 * @param hourOut
+	 * @param projectCode
 	 */
-	public Movement(String Rut,String NameInstallation,String DateIn,String DateOut,String HourIn,String HourOut) {
-		this.Rut = Rut;
-		this.NameInstallation = NameInstallation;
-		this.DateIn = DateIn;
-		this.DateOut = DateOut;
-		this.HourIn = HourIn;
-		this.HourOut = HourOut;
+	public Movement(String rut, String nameInstallation, String dateIn, String dateOut, String hourIn, String hourOut,
+			String projectCode) {
+		Rut = rut;
+		NameInstallation = nameInstallation;
+		DateIn = dateIn;
+		DateOut = dateOut;
+		HourIn = hourIn;
+		HourOut = hourOut;
+		ProjectCode = projectCode;
 	}
 
+	/**
+	 * @param rut the rut to set
+	 */
+	public void setRut(String rut) {
+		Rut = rut;
+	}
+	
 	/**
 	 * @return the rut
 	 */
@@ -44,10 +57,17 @@ public abstract class Movement {
 	}
 
 	/**
-	 * @param rut the rut to set
+	 * @return the projectCode
 	 */
-	public void setRut(String rut) {
-		Rut = rut;
+	public String getProjectCode() {
+		return ProjectCode;
+	}
+
+	/**
+	 * @param projectCode the projectCode to set
+	 */
+	public void setProjectCode(String projectCode) {
+		ProjectCode = projectCode;
 	}
 
 	/**

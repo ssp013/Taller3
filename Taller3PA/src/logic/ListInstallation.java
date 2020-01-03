@@ -31,10 +31,14 @@ public class ListInstallation {
 			return false;
 		}
 	}
-	public Installation searchInstallation(String nameInstalation) {
+	/**
+	 * @param nameInstallation ,The application parameter has an NameInstallation that is used to search a Installation
+	 * @return Search for a Installation, in case you find it returns a installation or otherwise, a null.
+	 */
+	public Installation searchInstallation(String nameInstallation) {
 		int k;
 		for(k=0;k<cant;k++) {
-			if(listInstallation[k].getNameInstalation().equals(nameInstalation)) {
+			if(listInstallation[k].getNameInstalation().equals(nameInstallation)) {
 				break;
 			}
 		}
@@ -44,9 +48,16 @@ public class ListInstallation {
 			return listInstallation[k];
 		}
 	}
+	
+	
 	public int getCantInstallation() {
 		return cant;
 	}
+	
+	/**
+	 * @param i, The application of this parameter has an to search a Installation in the specific location of the list.
+	 * @return a Installation returns, in the case that there is the position sought
+	 */
 	public Installation getInstallationI(int i) {
 		if(i>=0 && i<cant) {
 			return listInstallation[i];
