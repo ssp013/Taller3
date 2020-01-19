@@ -18,9 +18,9 @@ public class Hiring extends Movement {
 	 * @param NameDepartment
 	 * @param Date
 	 */
-	public Hiring(String Rut,String NameInstallation,String DateIn,String DateOut,String HourIn,String HourOut,String NameDepartment,String Date) {
+	public Hiring(String Rut,String NameInstallation,String DateIn,String DateOut,String HourIn,String HourOut,String projectCode,String  NameDepartment,String Date) {
 		// TODO Auto-generated constructor stub
-		super(Rut,NameInstallation,DateIn,DateOut,HourIn,HourOut);
+		super(Rut,NameInstallation,DateIn,DateOut,HourIn,HourOut, projectCode);
 		this.NameDepartment=NameDepartment;
 		this.Date = Date;
 	}

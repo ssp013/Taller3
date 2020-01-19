@@ -31,6 +31,8 @@ public class Project{
 		this.TotalBudget = TotalBudget;
 		this.ResponsibleDepartment = ResponsibleDepartment;
 		this.NumberOfAreasOfExpertise = NumberOfAreasOfExpertise;
+		listArea = new ListArea(100);
+		listDepartment = new ListDepartment(100);
 	}
 	/**
 	 * @return the projectCode

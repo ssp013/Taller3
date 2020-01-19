@@ -16,9 +16,9 @@ public class Reallocation extends Movement{
 	 * Class to create Reallocation.
 	 * @param Date
 	 */
-	public Reallocation(String Rut,String NameInstallation,String DateIn,String DateOut,String HourIn,String HourOut,String Date) {
+	public Reallocation(String Rut,String NameInstallation,String DateIn,String DateOut,String HourIn,String HourOut,String projectCode,String Date) {
 		// TODO Auto-generated constructor stub
-		super(Rut,NameInstallation,DateIn,DateOut,HourIn,HourOut);
+		super(Rut,NameInstallation,DateIn,DateOut,HourIn,HourOut,projectCode);
 		this.Date = Date;
 	}
 	/**

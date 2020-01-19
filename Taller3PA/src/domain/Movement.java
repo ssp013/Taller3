@@ -20,7 +20,6 @@ public abstract class Movement {
 	private String HourOut;
 	private String ProjectCode;
 	
-	
 
 	/**
 	 * @param rut
@@ -31,8 +30,7 @@ public abstract class Movement {
 	 * @param hourOut
 	 * @param projectCode
 	 */
-	public Movement(String rut, String nameInstallation, String dateIn, String dateOut, String hourIn, String hourOut,
-			String projectCode) {
+	public Movement(String rut, String nameInstallation, String dateIn, String dateOut, String hourIn, String hourOut,String projectCode) {
 		Rut = rut;
 		NameInstallation = nameInstallation;
 		DateIn = dateIn;

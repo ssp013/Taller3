@@ -7,7 +7,7 @@ package logic;
  * @author ssp013
  *
  */
-public class SystemSustoImpl {
+public class SystemSustoImpl implements SystemSusto{
 
 	/**
 	 * 

@@ -5,11 +5,12 @@ package domain;
 import logic.ListProject;
 import logic.ListRegistry;
 
+
 /**Class Scientist to the system
  * @author ssp013
  *
  */
-public class Scientist {
+public  class Scientist extends Staff {
 	/**
 	 * Class to create Scientist.
 	 * @params Rut,Name,LastName,MotherLastName,Area,AssociatedCost
@@ -22,6 +23,7 @@ public class Scientist {
 	private int AssociatedCost;
 	private ListProject listScientificProject;
 	private ListRegistry listRegistry;
+
 	
 	/**
 	 * @param Rut
@@ -32,84 +34,13 @@ public class Scientist {
 	 * @param AssociatedCost
 	 */
 	public Scientist(String Rut, String Name, String LastName,String MotherLastName,String Area,int AssociatedCost){
-		this.Rut = Rut;
-		this.Name = Name;
-		this.LastName = LastName;
-		this.MotherLastName = MotherLastName;
-		this.Area = Area;
+		super(Rut,Name,LastName, MotherLastName,Area);
 		this.AssociatedCost =AssociatedCost;
+		listScientificProject = new ListProject(100);
+		listRegistry = new ListRegistry(100);
+		
 	}
-
-	/**
-	 * @return the rut
-	 */
-	public String getRut() {
-		return Rut;
-	}
-
-	/**
-	 * @param rut the rut to set
-	 */
-	public void setRut(String rut) {
-		Rut = rut;
-	}
-
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return Name;
-	}
-
-	/**
-	 * @param name the name to set
-	 */
-	public void setName(String name) {
-		Name = name;
-	}
-
-	/**
-	 * @return the lastName
-	 */
-	public String getLastName() {
-		return LastName;
-	}
-
-	/**
-	 * @param lastName the lastName to set
-	 */
-	public void setLastName(String lastName) {
-		LastName = lastName;
-	}
-
-	/**
-	 * @return the motherLastName
-	 */
-	public String getMotherLastName() {
-		return MotherLastName;
-	}
-
-	/**
-	 * @param motherLastName the motherLastName to set
-	 */
-	public void setMotherLastName(String motherLastName) {
-		MotherLastName = motherLastName;
-	}
-
-	/**
-	 * @return the area
-	 */
-	public String getArea() {
-		return Area;
-	}
-
-	/**
-	 * @param area the area to set
-	 */
-	public void setArea(String area) {
-		Area = area;
-	}
-
+	
 	/**
 	 * @return the associatedCost
 	 */
@@ -150,6 +81,7 @@ public class Scientist {
 	public void setListRegistry(ListRegistry listRegistry) {
 		this.listRegistry = listRegistry;
 	}
+	
 	/**
 	 * (non-Javadoc)
 	 * @see java.long.Objext#toString()

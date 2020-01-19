@@ -19,10 +19,11 @@ public class Department {
 	 * @param Budget
 	 * @param listProject
 	 */
-	public Department(String NameDepartament,int DepartmentCapacity, int Budget,ListProject listProject){
+	public Department(String NameDepartament,int DepartmentCapacity, int Budget){
 		this.NameDepartament = NameDepartament;
 		this.DepartmentCapacity = DepartmentCapacity;
 		this.Budget=Budget;
+		listProject = new ListProject(10);
 	}
 
 	/**

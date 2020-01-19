@@ -16,9 +16,9 @@ public class Installation {
 	 * @param nameInstalation
 	 * @param listDepartamentInstalation
 	 */
-	public Installation(String nameInstalation,ListDepartment listDepartamentInstalation) {
+	public Installation(String nameInstalation) {
 		this.nameInstalation = nameInstalation;
-		this.listDepartamentInstalation = listDepartamentInstalation;
+		listDepartamentInstalation = new ListDepartment(100);
 	}
 	/**
 	 * @return nameInstalation
