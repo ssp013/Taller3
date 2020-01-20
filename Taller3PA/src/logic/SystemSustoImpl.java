@@ -152,6 +152,15 @@ public class SystemSustoImpl implements SystemSusto{
 		return resp;
 	}
 	@Override
+	public boolean existsOrNotScientist(String rut) {
+		boolean resp = false;
+		Staff s = listStaff.searchStafft(rut);
+		if(s== null) {
+			resp=true;
+		}
+		return resp;
+	}
+	@Override
 	public boolean createDepartment(String nameDpto, int Capacity, int budget) {
 		// TODO Auto-generated method stub
 		boolean resp = false;
@@ -274,7 +283,34 @@ public class SystemSustoImpl implements SystemSusto{
 		Registry R = new Registry(nameInstallation, Rut, DateIn, DateOut, HourIn, HourOut);
 		listRegistry.enterRegistry(R);
 		return true;
-	}	
+	}
+	public boolean HiringScientist(String Rut, String lastname, String MotherLastName,
+			String Area ,int AssociateCost,String department,String installation,
+			String [] listProjectScientist ) {
+		boolean resp=false;
+		Staff S = new Scientist(Rut,lastname,MotherLastName, Area,installation, AssociateCost);
+		listStaff.enterStaff(S);
+		//Verificamos el area.
+		for(int k=0;k<listProjectScientist.length;k++) {
+			String codeProjecto = listProjectScientist[k];
+			Project p = listProject.searchProyect(codeProjecto);
+			if(p!=null && p.getTotalBudget()>=AssociateCost && p.getListArea().searchArea(Area)!=null) {//descontar!!
+				Installation i = listInstallation.searchInstallation(installation);
+				if(i!=null) {
+					ListDepartment LD = i.getlistDepartamentInstalation();
+					Department D = LD.searchDepartment(department);
+					if(D!=null && D.getBudget()>=AssociateCost && D.getDepartmentCapacity()>0) {
+						//REstamos:
+						D.setBudget(D.getBudget()-AssociateCost);
+						D.setDepartmentCapacity(D.getDepartmentCapacity()-1);
+						p.setTotalBudget(p.getTotalBudget()-AssociateCost);
+						resp=true;
+					}
+				}	
+			}
+		}
+		return resp;
+	}
 	@Override
 	public boolean reasignarCientificoProyecto(String rutCientifico, String codProyectoA, String codProyectoN) {
 		// TODO Auto-generated method stub

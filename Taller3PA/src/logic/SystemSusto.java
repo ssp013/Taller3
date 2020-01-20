@@ -47,4 +47,6 @@ public interface SystemSusto {
 	public boolean CreateAreas(String nameAreas);
 	public boolean existsOrNotInstallation(String nameInstallation);
 	public boolean existsOrNotDepartment(String nameDepartment);
+	public boolean existsOrNotScientist(String rut);
+	public boolean HiringScientist(String Rut, String lastname, String MotherLastName, String Area ,int AssociateCost,String department,String installation,String [] listProjectScientist );
 }

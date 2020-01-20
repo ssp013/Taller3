@@ -250,7 +250,48 @@ public class App {
 		}
 	}
 	public static void HireScientist (SystemSusto System)throws IOException {
-
+		StdOut.println("Enter Rut of the Scientist (XX.XXX.XXX-X): ");
+		String rut = StdIn.readString();
+		boolean answer=validarRut(rut);
+		while(answer != true) {
+			StdOut.println("ERROR!: Enter Rut of the Scientist (XX.XXX.XXX-X):");
+			rut = StdIn.readString();
+			answer=validarRut(rut);
+		}
+		if(System.existsOrNotScientist(rut)) {
+			StdOut.println("Enter the name of Scientist:");
+			String name = StdIn.readString();
+			StdOut.println("Enter the last Name of Siencitst ");
+			String lastname = StdIn.readString();
+			StdOut.println("Enter the mother last name  of Scientist ");
+			String motherLastName = StdIn.readString();
+			StdOut.println("Enter your area of expertise: ");
+			String Area = StdIn.readString();
+			StdOut.println("Enter the associate cost: ");
+			int AssociateCost = validateOption();
+			StdOut.println("Enter the department that will be assigned  "+name+" "+lastname+" : ");
+			String department = StdIn.readString();
+			StdOut.println("Enter the Installation that will be assigned to "+name+" "+lastname+" : ");
+			String installation = StdIn.readString();
+			
+			//Solicitar los proyectos a los cuáles se asignará:
+			StdOut.println("Enter quantity of projects : ");
+			int n = validateOption();	
+			String [] listProjectScientist = new String[n];
+			for(int i=0;i<n;i++) {
+				int r = i+1;
+				StdOut.println("Enter Code of the project Nº "+r+" :");
+				listProjectScientist[i] = StdIn.readString();
+			}
+			if(System.HiringScientist(rut,lastname,motherLastName,Area , AssociateCost,department,installation,listProjectScientist )) {
+				StdOut.println("Successful income!");
+			}else {
+					StdOut.println("Erroneous income!");
+			}
+			
+		}else {
+			StdOut.println("This scientist already exists! Watch out!");
+		}
 	}
 	public static void CreateNewEntitiesMenu(SystemSusto System)throws IOException {
 		displayMenuCreateNewEntities();
