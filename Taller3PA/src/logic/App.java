@@ -19,6 +19,53 @@ import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 public class App {
 	static Scanner sc = new Scanner(System.in);
+	public static boolean validateDate(SystemSusto System,String dateStr) {
+		boolean result = System.isValid(dateStr);
+		if(result) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+	public static boolean validateDate2(SystemSusto System,String dateStr) {
+		boolean result = System.isValidDate(dateStr);
+		if(result) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+	public static boolean validarRut(String rut) {
+		boolean validacion = false;
+		try {
+		rut =  rut.toUpperCase();
+		rut = rut.replace(".", "");
+		rut = rut.replace("-", "");
+		int rutAux = Integer.parseInt(rut.substring(0, rut.length() - 1));
+		char dv = rut.charAt(rut.length() - 1);
+		int m = 0, s = 1;
+		for (; rutAux != 0; rutAux /= 10) {
+		s = (s + rutAux % 10 * (9 - m++ % 6)) % 11;
+		}
+		if (dv == (char) (s != 0 ? s + 47 : 75)) {
+		validacion = true;
+		}
+
+		} catch (java.lang.NumberFormatException e) {
+		} catch (Exception e) {
+		}
+		return validacion;
+		}	
+    public static boolean validarHora(String hora){
+    	boolean valido = false;
+        try{
+            LocalTime.parse(hora);
+            valido= true;
+        }catch(DateTimeParseException|NullPointerException e){
+          
+        } 
+        return valido;
+    }	
 	public static int validateOption(){
 		while (true){
 			try{
@@ -47,174 +94,173 @@ public class App {
 	}
 	public static boolean loadTXTInstallation(SystemSusto System) throws IOException {
 		boolean resp = false;
-		ArchivoEntrada archivoInstalaciones = new ArchivoEntrada("Installation.txt");
-		while(!archivoInstalaciones.isEndFile()){
-			Registro regEnt = archivoInstalaciones.getRegistro();
-			String nombreInstalacion = regEnt.getString(); 
-			int cantDepartamentos =  regEnt.getInt();
-			ListaDepartamentoInstalacion listaNuevaDI = new ListaDepartamentoInstalacion(cantDepartamentos);
-			for(int i=0;i<cantDepartamentos;i++) {
-				String depto1 = regEnt.getString();
-				int capacidad = regEnt.getInt();
-				int presupuesto = regEnt.getInt();
-				Departamento NuevoDepartamento = new Departamento(depto1, capacidad, presupuesto);
-				listaNuevaDI.ingesarDptoInstalacion(NuevoDepartamento);
-				sistema.crearDpto(depto1, capacidad, presupuesto);	
+		ArchivoEntrada txtInsta = new ArchivoEntrada("Installation.txt");
+		while(!txtInsta.isEndFile()){
+			Registro regEnt = txtInsta.getRegistro();
+		
+			String nameInstallation = regEnt.getString(); 
+			int quantityDpto =  regEnt.getInt();
+			
+			String [] listDepto = new String[quantityDpto];
+			int [] listCapacity = new int[quantityDpto];
+			int [] listBudget = new int[quantityDpto];
+			
+			for(int i=0;i<quantityDpto;i++) {
+				
+				listDepto[i]=regEnt.getString();
+				listCapacity[i]=regEnt.getInt();
+				listBudget[i]=regEnt.getInt();	
 			}
-			resp = sistema.CargarInstalaciones(nombreInstalacion,cantDepartamentos,listaNuevaDI);
+			resp= System.CretateInstallation(nameInstallation, quantityDpto, listDepto,listCapacity,listBudget);
 		}
-		archivoInstalaciones.close();
+		txtInsta.close();
 		return resp;
 	}
-	public static boolean cargarTXTIngresos(SistemaSUSTO sistema) throws IOException {
+	public static boolean loadTXTProjects(SystemSusto System) throws IOException {
 		boolean resp = false;
-		ArchivoEntrada archivoInstalaciones = new ArchivoEntrada("Ingresos.txt");
-		while(!archivoInstalaciones.isEndFile()){
-			Registro regEnt = archivoInstalaciones.getRegistro();
-			String nombreInstalacion = regEnt.getString(); 
-			String rut =  regEnt.getString();
-			String fecha =  regEnt.getString();
-			String hora = regEnt.getString();
-			resp = sistema.CargarIngresos(nombreInstalacion,rut,fecha,hora);
-		}
-		archivoInstalaciones.close();
-		return resp;
-	}
-	public static boolean cargarTXTEgresos(SistemaSUSTO sistema) throws IOException {
-		boolean resp = false;
-		ArchivoEntrada archivoInstalaciones = new ArchivoEntrada("Salidas.txt");
-		while(!archivoInstalaciones.isEndFile()){
-			Registro regEnt = archivoInstalaciones.getRegistro();
-			String nombreInstalacion = regEnt.getString(); 
-			String rut =  regEnt.getString();
-			String fecha =  regEnt.getString();
-			String hora = regEnt.getString();
-			resp = sistema.CargarSalidas(nombreInstalacion,rut,fecha,hora);
-		}
-		archivoInstalaciones.close();
-		return resp;
-	}
-	public static boolean cargarTXTProyectos(SistemaSUSTO sistema) throws IOException {
-		boolean resp = false;
-		ArchivoEntrada archivoProyecto = new ArchivoEntrada("Proyectos.txt");
-		while(!archivoProyecto.isEndFile()){
-			Registro regEnt = archivoProyecto.getRegistro();
-			String CodigoProyecto = regEnt.getString();
-			String NombreProyecto = regEnt.getString();
-			int PresupuestoTotal = regEnt.getInt();
-			String DptoResponsable = regEnt.getString();
-			int  CantAreasEspecializacion = regEnt.getInt();
-			ListaAreaEspecializacion  listaEspecializacion = new ListaAreaEspecializacion(CantAreasEspecializacion);
-			for(int i =0; i<CantAreasEspecializacion;i++) {
-				String areas = regEnt.getString();
-				AreaEspecializacion ObjetoArea = new AreaEspecializacion(areas);				
-				boolean realizado = listaEspecializacion.ingresarEspecializacion(ObjetoArea);
+		ArchivoEntrada archProjects = new ArchivoEntrada("Projects.txt");
+		while(!archProjects.isEndFile()){
+			Registro regEnt = archProjects.getRegistro();
+			String codeProject = regEnt.getString();
+			String nameProject = regEnt.getString();
+			int budget = regEnt.getInt();
+			String deptoResp = regEnt.getString();
+			int  QuantityAreas = regEnt.getInt();
+			String[] listAreas = new String[QuantityAreas];
+			for(int i =0; i<QuantityAreas;i++) {
+				listAreas[i] = regEnt.getString();				
 			}
-			resp = sistema.CargarProyectos(CodigoProyecto,NombreProyecto,PresupuestoTotal,DptoResponsable,CantAreasEspecializacion,listaEspecializacion);
+			resp = System.CreateProjects(codeProject,nameProject,budget,deptoResp,QuantityAreas,listAreas);
 		}
-		archivoProyecto.close();
+		archProjects.close();
 		return resp;
 	}
-	public static boolean cargarTXTCientifico(SistemaSUSTO sistema) throws IOException {
+	public static boolean loadTXTScientist(SystemSusto System) throws IOException {
 		boolean resp = false;
 		ArchivoEntrada archivoCientifico = new ArchivoEntrada("Cientificos.txt");
 		while(!archivoCientifico.isEndFile()){
 			Registro regEnt = archivoCientifico.getRegistro();
 			String Rut = regEnt.getString();
-			String Nombre = regEnt.getString();
-			String ApellidoP = regEnt.getString();
-			String ApellidoM = regEnt.getString();
+			String Name = regEnt.getString();
+			String LastName = regEnt.getString();
+			String MotherLastName = regEnt.getString();
 			String Area = regEnt.getString();
-			int CostoAsociado =  regEnt.getInt();
-			String codProyecto = regEnt.getString();
-			resp = sistema.CargarCientifico(Rut, Nombre, ApellidoP, ApellidoM, Area, CostoAsociado,codProyecto);
+			int AssociatedCost =  regEnt.getInt();
+			String CodProject = regEnt.getString();
+			resp = System.CreateScientist(Rut, Name, LastName, MotherLastName, Area, AssociatedCost,CodProject);
 		}
 		archivoCientifico.close();
 		return resp;
-	}	
+	}
+	public static boolean RegistryScientist(SystemSusto System) throws IOException {
+		boolean resp = false;
+		ArchivoEntrada arch = new ArchivoEntrada("Ingresos.txt");
+		while(!arch.isEndFile()){
+			Registro regEnt = arch.getRegistro();
+			String nameInstallation = regEnt.getString(); 
+			String Rut =  regEnt.getString();
+			String DateIn =  regEnt.getString();
+			String DateOut =  regEnt.getString();
+			String HourIn = regEnt.getString();
+			String HourOut = regEnt.getString();
+			resp = System.RegistryScientist(nameInstallation,Rut,DateIn,DateOut,HourIn,HourOut);
+		}
+		arch.close();
+		return resp;
+	}
 	public static boolean loadTXT(SystemSusto System) throws IOException {
-		boolean resp1,resp2,resp3,resp4,resp5;
-		resp1=cargarTXTInstalaciones(sistema);
-		resp2=cargarTXTProyectos(sistema);
-		resp3=cargarTXTCientifico(sistema);
-		resp4 = cargarTXTIngresos(sistema);
-		resp5 = cargarTXTEgresos(sistema);
-		if(resp1==true && resp2 ==true && resp3 == true && resp4 ==true && resp5 == true) {
+		boolean resp1,resp2,resp3,resp4;
+		resp1=loadTXTInstallation(System);
+		resp2=loadTXTProjects(System);
+		resp3=loadTXTScientist(System);
+		resp4 = RegistryScientist(System);
+		if(resp1==true && resp2 ==true && resp3 == true && resp4 ==true) {
 			return true;
 		}else {
 			return false;
 		}
-	}	
-	public static void menu(SystemSusto System) {
-		displayMenu(); 
+	}		
+	public static void getTxtScientist(SystemSusto System)throws IOException{
+
+	}
+	public static void getTxtProjects(SystemSusto System)throws IOException{
+
+	}
+	public static void getTxtInstallation(SystemSusto System)throws IOException{
+		
+	}
+	public static void toUpdateTXT(SystemSusto System)throws IOException{
+		getTxtScientist(System);
+		getTxtProjects(System);
+		getTxtInstallation(System);
+	}
+	public static void menu(SystemSusto System) throws IOException {
+			displayMenu(); 
 	        StdOut.println("Enter a choice: ");
 	        int op = validateOption();
-	        boolean cargoTXT = false;
+	        boolean loadsTXT = false;
 	        while(op!=6){  	
 	            switch(op){
 	                case 1:
 	                	boolean respTXT = false;
-	                	cargoTXT = true;
-	                	respTXT=cargarTXT(sistema);
+	                	loadsTXT = true;
+	                	respTXT=loadTXT(System);
 	                	if(respTXT) {
-	                		StdOut.println("Datos cargados exitosamente");                		
+	                		StdOut.println("Data loaded successfully");                		
 	                	}else {
-	                		StdOut.println("Revise la carpeta de los archivos TXT");
+	                		StdOut.println("Check the TXT files folder");
 	                	}
 	                break;
-	                case 2:
-	                	if(cargoTXT == true) {
-	                		menuCrearNuevasEntidades(sistema);                		
+	        /*        case 2:
+	                	if(loadsTXT == true) {
+	                		menuCrearNuevasEntidades(System);                		
 	                	}else {
-	                		StdOut.println("Debe cargar los arhivos txt!");
+	                		StdOut.println("You must load the txt files!");
 	                	}
 	                break;
 	                case 3:
-	                	if(cargoTXT == true) {
-	                		menuEntradaSalida(sistema);                		
+	                	if(loadsTXT == true) {
+	                		menuEntradaSalida(System);                		
 	                	}else {
-	                		StdOut.println("Debe cargar los arhivos txt!");
+	                		StdOut.println("You must load the txt files!");
 	                	}
 	                break;
 	                case 4:
-	                	if(cargoTXT == true) {
-	                		menuReasignarCientifico(sistema);                		
+	                	if(loadsTXT == true) {
+	                		menuReasignarCientifico(System);                		
 	                	}else {
-	                		StdOut.println("Debe cargar los arhivos txt!");
+	                		StdOut.println("You must load the txt files!");
 	                	}
 	                break;
 	                case 5:
-	                	if(cargoTXT == true) {
-	                		menuReportesDePersonalYCostos(sistema);              		
+	                	if(loadsTXT == true) {
+	                		menuReportesDePersonalYCostos(System);              		
 	                	}else {
-	                		StdOut.println("Debe cargar los arhivos txt!");
+	                		StdOut.println("You must load the txt files!");
 	                	}
 	                break;
+	            */
 	                case 6:
-	                	
-	                	StdOut.println("Muchas gracias por ocupar sistema SUSTO ");
-	                break;
+	                	StdOut.println("Thank you very much for occupying SUSTO system ");
+	                	break;
 	            }
-	            desplegarMenu();
-	            StdOut.println("Ingrese una opción ");
-	            op = validarOpcion();
+	            displayMenu();
+	            StdOut.println("Insert a option:  ");
+	            op = validateOption();
 	        }
-	        ActualizarTXT(sistema);
-		
+	        toUpdateTXT(System);
+	        
 	}
-	
-	public static void main(String []args) {
+	public static void main(String []args) throws IOException {
+		StdOut.println("******** Welcome to the SUSTO system ********");
 		SystemSusto System =  new SystemSustoImpl();
-		displayMenu();
 		StdOut.println("Insert the date: (dd/MM/yyyy) :");
 		String dateStr = StdIn.readString();
-		boolean resultado = validarFecha(sistema,dateStr);
-
-		while(!resultado) {
-			StdOut.println("Ingrese fecha actual!");
+		boolean result = validateDate(System,dateStr);
+		while(!result) {
+			StdOut.println("Enter current date!");
 			dateStr = StdIn.readString();
-			resultado = validarFecha(sistema,dateStr);
-
+			result = validateDate(System,dateStr);
 		}
 		menu(System);
 	}
