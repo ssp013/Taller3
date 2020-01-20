@@ -133,13 +133,14 @@ public class App {
 			resp = System.CreateProjects(codeProject,nameProject,budget,deptoResp,QuantityAreas,listAreas);
 		}
 		archProjects.close();
+
 		return resp;
 	}
 	public static boolean loadTXTScientist(SystemSusto System) throws IOException {
 		boolean resp = false;
-		ArchivoEntrada archivoCientifico = new ArchivoEntrada("Cientificos.txt");
-		while(!archivoCientifico.isEndFile()){
-			Registro regEnt = archivoCientifico.getRegistro();
+		ArchivoEntrada archScientist = new ArchivoEntrada("Scientist.txt");
+		while(!archScientist.isEndFile()){
+			Registro regEnt = archScientist.getRegistro();
 			String Rut = regEnt.getString();
 			String Name = regEnt.getString();
 			String LastName = regEnt.getString();
@@ -149,12 +150,12 @@ public class App {
 			String CodProject = regEnt.getString();
 			resp = System.CreateScientist(Rut, Name, LastName, MotherLastName, Area, AssociatedCost,CodProject);
 		}
-		archivoCientifico.close();
+		archScientist.close();
 		return resp;
 	}
 	public static boolean RegistryScientist(SystemSusto System) throws IOException {
 		boolean resp = false;
-		ArchivoEntrada arch = new ArchivoEntrada("Ingresos.txt");
+		ArchivoEntrada arch = new ArchivoEntrada("Registry.txt");
 		while(!arch.isEndFile()){
 			Registro regEnt = arch.getRegistro();
 			String nameInstallation = regEnt.getString(); 
@@ -170,11 +171,13 @@ public class App {
 	}
 	public static boolean loadTXT(SystemSusto System) throws IOException {
 		boolean resp1,resp2,resp3,resp4;
+		
 		resp1=loadTXTInstallation(System);
 		resp2=loadTXTProjects(System);
 		resp3=loadTXTScientist(System);
 		resp4 = RegistryScientist(System);
-		if(resp1==true && resp2 ==true && resp3 == true && resp4 ==true) {
+		
+		if(resp1==true && resp2 ==true && resp3 == true &&  resp4 ==true) {
 			return true;
 		}else {
 			return false;
@@ -194,6 +197,85 @@ public class App {
 		getTxtProjects(System);
 		getTxtInstallation(System);
 	}
+	public static void displayMenuCreateNewEntities() {
+		StdOut.println (" 1.Create Installation\n 2.Create Department\n 3. Hire Scientist\n 4. Exit");
+	}
+
+	public static void CreateInstallation(SystemSusto System) {
+		StdOut.println("Insert the name of the Installation:");
+		String NameInstallation = StdIn.readString();
+		if(System.existsOrNotInstallation(NameInstallation)){	
+			StdOut.println ("Enter the number of departments the facility has");
+			int QuantityDeptos = validateOption();
+			
+			String [] listDepto = new String[QuantityDeptos];
+			int [] listCapacity = new int[QuantityDeptos];
+			int [] listBudget = new int[QuantityDeptos];
+			
+			for(int i=0;i<QuantityDeptos;i++) {
+				StdOut.println("Enter the name of the Department: ");
+				listDepto[i]=StdIn.readString();
+				StdOut.println("Enter the Capacity of the Department: ");
+				listCapacity[i]=validateOption();
+				StdOut.println("Enter the budget of the Department: ");
+				listBudget[i]=validateOption();
+			}
+			boolean resp = System.CretateInstallation(NameInstallation, QuantityDeptos, listDepto, listCapacity, listBudget);
+			if(resp== true) {
+				StdOut.println("successful income!");
+			}else {
+				StdOut.println("erroneous income!");
+			}
+		}else {
+			StdOut.println("The installation already exists "+NameInstallation+" !");
+		}
+	}
+
+	
+	public static void CreateDepartment (SystemSusto System)throws IOException {
+		StdOut.println("Insert the name of the Installation:");
+		String NameDepartment = StdIn.readString();
+		if(System.existsOrNotDepartment(NameDepartment)) {
+			StdOut.println("Enter the capacity of the department: ");
+			int capacity = validateOption();
+			StdOut.println("Enter the budget of the department: ");
+			int budget = validateOption();
+			if(System.createDepartment(NameDepartment,capacity,budget)) {
+				StdOut.println("Successful income!");
+			}else {
+				StdOut.println("Erroneous income!");
+			}
+		}else {
+			StdOut.println("The department already exists "+NameDepartment+" !");
+		}
+	}
+	public static void HireScientist (SystemSusto System)throws IOException {
+
+	}
+	public static void CreateNewEntitiesMenu(SystemSusto System)throws IOException {
+		displayMenuCreateNewEntities();
+        StdOut.println("Insert an Option: ");
+        int option = validateOption();
+        while(option!=4){
+            switch(option){
+                case 1:
+                	CreateInstallation(System);
+                break;
+                case 2:
+                	CreateDepartment(System);
+                break;
+                case 3:
+                	HireScientist(System);
+                break;
+                case 4:
+                	StdOut.println("Out!");
+                break;
+
+            }
+            displayMenuCreateNewEntities();
+            option = validateOption();
+        }	
+	}
 	public static void menu(SystemSusto System) throws IOException {
 			displayMenu(); 
 	        StdOut.println("Enter a choice: ");
@@ -211,13 +293,17 @@ public class App {
 	                		StdOut.println("Check the TXT files folder");
 	                	}
 	                break;
-	        /*        case 2:
+	                case 2:
 	                	if(loadsTXT == true) {
-	                		menuCrearNuevasEntidades(System);                		
+	                		CreateNewEntitiesMenu(System);                		
 	                	}else {
 	                		StdOut.println("You must load the txt files!");
 	                	}
 	                break;
+	                case 6:
+	                	StdOut.println("Thank you very much for occupying SUSTO system ");
+	                break;
+	               /*
 	                case 3:
 	                	if(loadsTXT == true) {
 	                		menuEntradaSalida(System);                		
@@ -240,9 +326,7 @@ public class App {
 	                	}
 	                break;
 	            */
-	                case 6:
-	                	StdOut.println("Thank you very much for occupying SUSTO system ");
-	                	break;
+
 	            }
 	            displayMenu();
 	            StdOut.println("Insert a option:  ");
@@ -254,14 +338,14 @@ public class App {
 	public static void main(String []args) throws IOException {
 		StdOut.println("******** Welcome to the SUSTO system ********");
 		SystemSusto System =  new SystemSustoImpl();
-		StdOut.println("Insert the date: (dd/MM/yyyy) :");
+		/*StdOut.println("Insert the date: (dd/MM/yyyy) :");
 		String dateStr = StdIn.readString();
 		boolean result = validateDate(System,dateStr);
 		while(!result) {
 			StdOut.println("Enter current date!");
 			dateStr = StdIn.readString();
 			result = validateDate(System,dateStr);
-		}
+		}*/
 		menu(System);
 	}
 }

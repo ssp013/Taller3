@@ -1,1 +1,2 @@
-nameInstallation,2,Depto1,2,100000,Depto2,3,200000
+insta1,2,depto1,2,100000,depto2,3,200000
+insta2,1,depto3,1,100000

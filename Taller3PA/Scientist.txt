@@ -1,1 +1,2 @@
-20.236.276-1,Dionisio Olivares,0001,Tema de titulación2020
+191006577,Sebastian,Sanchez,Perez,quimica,10,01
+20,Tomas,Sandoval,TOrres,fisica,30,02

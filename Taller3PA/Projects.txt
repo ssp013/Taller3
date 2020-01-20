@@ -1,1 +1,2 @@
-20.236.276-1,Dionisio Olivares,0001,Tema de titulación2020
+01,proyecto1,100,depto1,2,quimica,matematica
+02,proyecto2,200,depto3,1,fisica

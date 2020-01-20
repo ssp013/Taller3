@@ -8,6 +8,7 @@ package logic;
 import java.io.IOException;
 import ucn.ArchivoEntrada;
 public interface SystemSusto {
+	
 	public boolean CretateInstallation(String nameInstallation, int quantityDpto,String [] listDepto,int [] listCapacity,int [] listBudget);
     //Descripcion: Crea una nueva instalacion.
     //PreCondiciones: Instalacion a crear no debe existir en la lista general de instalaciones.
@@ -44,4 +45,6 @@ public interface SystemSusto {
     //PostCondiciones: Fecha validada.
 	public boolean RegistryScientist(String nameInstallation,String Rut,String DateIn, String DateOut,String HourIn, String HourOut);
 	public boolean CreateAreas(String nameAreas);
+	public boolean existsOrNotInstallation(String nameInstallation);
+	public boolean existsOrNotDepartment(String nameDepartment);
 }

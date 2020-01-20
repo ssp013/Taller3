@@ -2,7 +2,7 @@
  * 
  */
 package logic;
-
+import ucn.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -36,6 +36,7 @@ public class SystemSustoImpl implements SystemSusto{
 		 listMovement= new ListMovement(100);
 		 listRegistry= new ListRegistry(100);
 	}
+
 	@Override
 	public boolean isValidDate(String dateStr) {
 		try {//"dd/MM/yyyy")
@@ -93,7 +94,15 @@ public class SystemSustoImpl implements SystemSusto{
 		}
 		
 	}
-
+	@Override
+	public boolean existsOrNotInstallation(String nameInstallation) {
+		boolean resp = false;
+		Installation i = listInstallation.searchInstallation(nameInstallation);
+		if(i==null) {
+			resp=true;
+		}
+		return resp;
+	}
 	@Override
 	public boolean CretateInstallation(String nameInstallation, int quantityDpto,String [] listDepto,int [] listCapacity,int [] listBudget) {
 		// TODO Auto-generated method stub
@@ -101,7 +110,7 @@ public class SystemSustoImpl implements SystemSusto{
 		//Check if in the List general exist or not.
 		Installation installation = listInstallation.searchInstallation(nameInstallation);
 		if(installation!=null) {//YESSSS in the list!
-			for(int i=0;i<quantityDpto;i++) {		
+			for(int i=0;i<quantityDpto;i++) {	
 				String department = listDepto[i];
 				int capacity= listCapacity[i];
 				int budget = listBudget[i];	
@@ -125,6 +134,20 @@ public class SystemSustoImpl implements SystemSusto{
 					}
 				}
 			}
+		}else {
+			Installation insta = new Installation(nameInstallation);
+			listInstallation.enterInstallation(insta);
+			resp=true;
+		}
+		
+		return resp;
+	}
+	@Override
+	public boolean existsOrNotDepartment(String nameDepartment) {
+		boolean resp = false;
+		Department d = listDepartment.searchDepartment(nameDepartment);
+		if(d==null) {
+			resp=true;
 		}
 		return resp;
 	}
@@ -175,6 +198,8 @@ public class SystemSustoImpl implements SystemSusto{
 		}else {
 			Project p = new Project(ProjectCode,nameProject,budget,DeptoResp,quantityAreas);
 			listProject.enterProject(p);
+			resp = true;
+			
 			ListDepartment lD = p.getListDepartment();
 			Department d = listDepartment.searchDepartment(DeptoResp);
 			if(d!=null) {
@@ -197,6 +222,7 @@ public class SystemSustoImpl implements SystemSusto{
 		return resp;
 		
 	}
+
 	@Override
 	public boolean CreateAreas(String nameArea) {
 		// TODO Auto-generated method stub
@@ -216,20 +242,38 @@ public class SystemSustoImpl implements SystemSusto{
 		// TODO Auto-generated method stub
 		boolean resp = false;
 		
-		
-		
-		
-		
+		//exists???
+		Staff s = listStaff.searchStafft(Rut);
+		if(s==null) {
+			Staff SN = new Scientist(Rut, Name, LastName, MotherLastName, Area,AssociatedCost);
+			listStaff.enterStaff(SN);
+			if(SN instanceof Scientist) {
+				ListProject lP = ((Scientist) SN).getListScientificProject();
+				Project p = listProject.searchProyect(CodProject);
+				if(p!=null) {
+					lP.enterProject(p);				
+					resp=true;
+				}
+			}
+			resp= true;
+		}else {
+			if(s instanceof Scientist) {
+				ListProject lP = ((Scientist) s).getListScientificProject();
+				Project p = listProject.searchProyect(CodProject);
+				if(p!=null) {
+					lP.enterProject(p);				
+					resp=true;
+				}
+			}
+		}
 		return resp;
 	}
 	
-	
-	
-	
 	@Override
 	public boolean RegistryScientist(String nameInstallation,String Rut,String DateIn, String DateOut,String HourIn, String HourOut) {
-		
-		return false;
+		Registry R = new Registry(nameInstallation, Rut, DateIn, DateOut, HourIn, HourOut);
+		listRegistry.enterRegistry(R);
+		return true;
 	}	
 	@Override
 	public boolean reasignarCientificoProyecto(String rutCientifico, String codProyectoA, String codProyectoN) {

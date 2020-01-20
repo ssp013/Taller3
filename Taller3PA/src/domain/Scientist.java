@@ -15,11 +15,7 @@ public  class Scientist extends Staff {
 	 * Class to create Scientist.
 	 * @params Rut,Name,LastName,MotherLastName,Area,AssociatedCost
 	 */
-	private String Rut;
-	private String Name;
-	private String LastName;
-	private String MotherLastName;
-	private String Area;
+
 	private int AssociatedCost;
 	private ListProject listScientificProject;
 	private ListRegistry listRegistry;
@@ -89,9 +85,8 @@ public  class Scientist extends Staff {
 
 	@Override
 	public String toString() {
-		return "Scientist [Rut=" + Rut + ", Name=" + Name + ", LastName=" + LastName + ", MotherLastName="
-				+ MotherLastName + ", Area=" + Area + ", AssociatedCost=" + AssociatedCost + ", listScientificProject="
-				+ listScientificProject + "]";
+		return "Scientist [Rut=" + getRut() + ", Name=" + getName() + ", LastName=" + getLastName() + ", MotherLastName="
+				+ getMotherLastName() + ", Area=" + getArea() + ", AssociatedCost=" + getAssociatedCost();
 	}
 
 	
