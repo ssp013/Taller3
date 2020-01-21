@@ -363,6 +363,46 @@ public class App {
 		}
 		
 	}
+	public static void  EnlistExit(SystemSusto System) {
+		StdOut.println("Enter the name of the installation ");
+		String installation = StdIn.readString();
+		while(System.existsOrNotInstallation(installation)){
+			StdOut.println("Error! Enter a correct name of the installation ");
+			installation = StdIn.readString();
+		}
+		
+		StdOut.println("Enter the Rut of the Scientist: ");
+		String Rut = StdIn.readString();
+		while(System.existsOrNotScientist(Rut)){
+			StdOut.println("Error! Enter the Rut of the Scientist: ");
+			Rut = StdIn.readString();
+		}			
+		
+		StdOut.println("Enter the Date Out(dd/MM/yyyy) : ");
+		String dateOut = StdIn.readString();
+		boolean result = validateDate2(System,dateOut);
+		while(!result) {
+			StdOut.println("Error! Enter the Date Out (dd/MM/yyyy) :");
+			dateOut = StdIn.readString();
+			result = validateDate2(System,dateOut);
+		}
+		
+		
+		StdOut.println("Enter the hour Out (hh:mm) : ");
+		String timeOut = StdIn.readString();
+		boolean ValidateTimeIN = validateTime(timeOut);
+		while(!ValidateTimeIN) {
+			StdOut.println("Error! Enter the correct hour Out(hh:mm)");
+			timeOut = StdIn.readString();
+			ValidateTimeIN = validateTime(timeOut);
+		}
+		
+		if(System.EnlistExit(installation,Rut,"0","0",dateOut,timeOut)) {
+			StdOut.println("Successful income!");
+		}else {
+				StdOut.println("Erroneous income!");
+		}
+	}
 	public static void menuInputOutput(SystemSusto System) {
 		StdOut.println("1.Register Entry\n 2. Register Output\n 3. Go out ");
 		StdOut.println("Enter an option: ");
@@ -373,7 +413,7 @@ public class App {
                 	EnlistIncome(System);
                 break;
                 case 2:
-                	//EnlistarSalida(System);
+                	EnlistExit(System);
                 break;
                 case 3:
                 break;
@@ -384,6 +424,77 @@ public class App {
         }
 		
 	}
+	public static void reallocateScientificProject(SystemSusto System) {
+		StdOut.println("Enter the scientist's rut (XX.XXX.XXX-X): ");
+		String rut = StdIn.readString();
+		boolean answer=validarRut(rut);
+		while(answer != true) {
+			StdOut.println("Error! Enter the scientist's rut (XX.XXX.XXX-X) : ");
+			rut = StdIn.readString();
+			answer=validarRut(rut);
+		}
+		
+		StdOut.println("Enter the code of the previous project:");
+		String codProjOld = StdIn.readString();
+		while(System.existsOrNotProject(codProjOld)){
+			StdOut.println("Error! Enter the code of the previous project: ");
+			codProjOld = StdIn.readString();
+		}			
+		
+		
+		StdOut.println("Enter the code of the new project:");
+		String codprojNew= StdIn.readString();
+		while(System.existsOrNotProject(codprojNew)){
+			StdOut.println("Error! Enter the code of the new project: ");
+			codprojNew = StdIn.readString();
+		}	
+		
+		if( System.reallocateScientificProject(rut, codProjOld, codprojNew)   ) {
+			StdOut.println("Successful income!");
+		}else {
+				StdOut.println("Erroneous income!");
+		}
+	}
+	
+	public static void reasignarCientificoInstalacion(SystemSusto System) {
+		/*StdOut.println("Ingrese el rut del cientifico (XX.XXX.XXX-X): ");
+		String rutCientifico = StdIn.readString();
+		boolean respuesta=validarRut(rutCientifico);
+		while(respuesta != true) {
+			StdOut.println("Ingrese el rut del cientifico: ");
+			rutCientifico = StdIn.readString();
+			respuesta=validarRut(rutCientifico);
+		}
+		StdOut.println("Ingrese el nombre de la instalación anterior:");
+		String nomInstalacionA = StdIn.readString();
+		StdOut.println("Ingrese el nombre de la instalación nueva:");
+		String nomInstalacionN= StdIn.readString();
+		if(System.reasignarCientificoInstalacion(rutCientifico, nomInstalacionA, nomInstalacionN)) {
+			StdOut.println("Reasignación correcta!");
+		}else {
+			StdOut.println("Reasignación incorrecta!");
+		}	*/	
+	}
+	public static void ScientificReassignmenu(SystemSusto System) {
+		StdOut.println("1.Reassign scientist by project\n 2. Reassign scientist by installation\n 3. Leave");
+		int op = validateOption();
+        while(op!=3){  	
+            switch(op){
+            	case 1:
+            		reallocateScientificProject(System);
+            	break;
+            	case 2:
+            		//reallocateScientificInstallation(System);
+                break;
+            	case 3:
+            		StdOut.println("successful exit!");
+                break;
+            }
+            StdOut.println("1.Reassign scientist by project\n 2. Reassign scientist by installation\n 3. Leave");
+            StdOut.println("Enter a option: ");
+            op = validateOption();
+        }
+    }
 	public static void menu(SystemSusto System) throws IOException {
 			displayMenu(); 
 	        StdOut.println("Enter a choice: ");
@@ -421,18 +532,20 @@ public class App {
 	                		StdOut.println("You must load the txt files!");
 	                	}
 	                break;
-	                case 6:
-	                	StdOut.println("Thank you very much for occupying SUSTO system ");
-	                break;
-	               /*
-
 	                case 4:
 	                	if(loadsTXT == true) {
-	                		menuReasignarCientifico(System);                		
+	                		ScientificReassignmenu(System);                		
 	                	}else {
 	                		StdOut.println("You must load the txt files!");
 	                	}
 	                break;
+	                
+	                
+	                
+	                case 6:
+	                	StdOut.println("Thank you very much for occupying SUSTO system ");
+	                break;
+	               /*
 	                case 5:
 	                	if(loadsTXT == true) {
 	                		menuReportesDePersonalYCostos(System);              		

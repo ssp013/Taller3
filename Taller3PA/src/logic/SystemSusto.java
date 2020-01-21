@@ -18,11 +18,11 @@ public interface SystemSusto {
     //PreCondiciones: Departamento a crear no debe existir en la lista general de Departamento.
     //PostCondiciones: Departamento creado.
 	
-	public boolean reasignarCientificoProyecto(String rutCientifico, String codProyectoA, String codProyectoN);
+	public boolean reallocateScientificProject(String rut, String codOld, String codNew);
     //Descripcion: Reasignacion de proyecto(s) a un cientifico.
     //PreCondiciones: El cientifico debe estar en la lista  general de cientificos. ProyectoA debe estar en la lista de proyectos del cientifico. ProyectoN debe estar en la lista general de proyectos.
     //PostCondiciones: Reasignacion hecha.
-	public boolean reasignarCientificoInstalacion(String rutCientifico, String nomInstalacionA, String nomInstalacionN);
+	public boolean reallocateScientificInstallation(String rut, String nameInstallationOld, String nameInstallationNew);
     //Descripcion: Reasignacion de una instalacion a un cientifico.
     //PreCondicion: El cientifico debe estar en la lista general de cientificos. nomInstalacionA debe estar en la lista de instalaciones del cientifico. nomInstalacionN debe estar en la lista general de cientificos.
     //PostCondiciones: Reasignacion hecha.
@@ -48,11 +48,12 @@ public interface SystemSusto {
 	public boolean existsOrNotInstallation(String nameInstallation);
 	public boolean existsOrNotDepartment(String nameDepartment);
 	public boolean existsOrNotScientist(String rut);
+	public boolean existsOrNotProject(String code);
 	public boolean HiringScientist(String Rut, String lastname, String MotherLastName, String Area ,int AssociateCost,String department,String installation,int n,String [] listProjectScientist );
 	
 	
 	public boolean EnlistIncome(String installation,String Rut,String dateIn,String timeIn,String dateOut,String timeOut);
-	
+	public boolean EnlistExit(String installation,String Rut,String dateIn,String timeIn,String dateOut,String timeOut);
 	public String toDeployListProject();
 	public String toDeployListDepartment();
 	public String toDeployListScientist();

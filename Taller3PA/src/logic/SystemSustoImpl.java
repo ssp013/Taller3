@@ -162,6 +162,15 @@ public class SystemSustoImpl implements SystemSusto{
 		return resp;
 	}
 	@Override
+	public boolean existsOrNotProject(String code) {
+		boolean resp = false;
+		Project p = listProject.searchProyect(code);
+		if(p== null) {
+			resp=true;
+		}
+		return resp;
+	}
+	@Override
 	public boolean createDepartment(String nameDpto, int Capacity, int budget) {
 		// TODO Auto-generated method stub
 		boolean resp = false;
@@ -290,7 +299,7 @@ public class SystemSustoImpl implements SystemSusto{
 		boolean resp = false;
 		Staff sc = listStaff.searchStafft(Rut);
 		if(sc instanceof Scientist) {
-			StdOut.println("Dale\n");
+			//StdOut.println("Dale\n");
 			ListProject proj = ((Scientist) sc).getListScientificProject();
 			for(int k=0;k<proj.projectQuantity();k++) {
 				Project p = proj.getProject(k);
@@ -302,11 +311,11 @@ public class SystemSustoImpl implements SystemSusto{
 							Installation insta = listInstallation.getInstallationI(a);
 							Department d2= insta.getlistDepartamentInstalation().searchDepartment(d.getNameDepartament());
 							if(d2!=null  ) {
-								StdOut.println("Dale\n");
+								//StdOut.println("Dale\n");
 								//Esta en la installation ese departamento..
 								//Ese proyecto pertenece a ese insta, depto, !
 								if(installation.equals(insta.getNameInstalation())) {
-									StdOut.println("Dale\n");
+									//StdOut.println("Dale\n");
 									//¿Comprobamos si existe un registro?
 									ListRegistry LR = ((Scientist) sc).getListRegistry();
 									for(int i=0;i<LR.RegistrytQuantity();i++) {
@@ -314,10 +323,66 @@ public class SystemSustoImpl implements SystemSusto{
 										if(nombreInsta.equals(insta.getNameInstalation())   
 										&& !dateIn.equals(LR.getRegistryI(i).getDateIn())  
 										&& !timeIn.equals(LR.getRegistryI(i).getHourIn())) {
-											StdOut.println("Dale\n");
+											//StdOut.println("Dale\n");
 											//Si es la misma instalación, distitno fecha y hora.. lo agrego el nuevo registro.
 											Registry re = new Registry(installation,Rut,dateIn,timeIn,dateOut,timeOut);
 											listRegistry.enterRegistry(re);
+											resp=true;
+											
+										}
+									}
+							}
+					
+								
+								
+								
+							}
+							
+							
+						}
+						
+					}
+				}
+			}	
+		}
+		return resp;
+	}
+	public boolean EnlistExit(String installation,String Rut,String dateIn,String timeIn,String dateOut,String timeOut) {
+		boolean resp = false;
+		Staff sc = listStaff.searchStafft(Rut);
+		if(sc instanceof Scientist) {
+			//StdOut.println("Dale\n");
+			ListProject proj = ((Scientist) sc).getListScientificProject();
+			for(int k=0;k<proj.projectQuantity();k++) {
+				Project p = proj.getProject(k);
+				for(int j=0;j< p.getListDepartment().DepartmentQuantity();j++) {
+					ListDepartment Ld = p.getListDepartment();
+					for(int l=0;l<Ld.DepartmentQuantity();l++) {
+						Department d = Ld.getDepartmentI(l);
+						for(int a=0;a<listInstallation.getCantInstallation();a++) {
+							Installation insta = listInstallation.getInstallationI(a);
+							Department d2= insta.getlistDepartamentInstalation().searchDepartment(d.getNameDepartament());
+							if(d2!=null  ) {
+								//StdOut.println("Dale\n");
+								//Esta en la installation ese departamento..
+								//Ese proyecto pertenece a ese insta, depto, !
+								if(installation.equals(insta.getNameInstalation())) {
+									//StdOut.println("Dale\n");
+									//¿Comprobamos si existe un registro?
+									ListRegistry LR = ((Scientist) sc).getListRegistry();
+									for(int i=0;i<LR.RegistrytQuantity();i++) {
+										
+										String nombreInsta = LR.getRegistryI(i).getNameInstallation() ;
+										String dOut =  LR.getRegistryI(i).getDateOut() ;// "0"
+										String tOut =  LR.getRegistryI(i).getHourOut() ;// "0"
+										String Date2 = LR.getRegistryI(i).getDateIn() ;
+										
+										if(nombreInsta.equals(insta.getNameInstalation()) &&  
+											dOut.equals("0") && tOut.equals("0") 
+										&&     Date2.equals(dateOut)) {
+											//StdOut.println("Dale\n");
+											LR.getRegistryI(i).setDateOut(dateOut);
+											LR.getRegistryI(i).setHourOut(timeOut);;
 											resp=true;
 											
 										}
@@ -353,15 +418,15 @@ public class SystemSustoImpl implements SystemSusto{
 			if(p!=null) {
 					if(p.getTotalBudget()>=AssociateCost && p.getListArea().searchArea(Area)!=null) {//descontar!!
 						
-						StdOut.print("dale");
+						//StdOut.print("dale");
 						Installation i = listInstallation.searchInstallation(installation);
 							if(i!=null) {
-								StdOut.print("dale");
+								//StdOut.print("dale");
 								
 								ListDepartment LD = i.getlistDepartamentInstalation();
 								Department D = LD.searchDepartment(department);
 								if(D!=null && D.getBudget()>=AssociateCost && D.getDepartmentCapacity()>0) {
-									StdOut.print("dale");
+									//StdOut.print("dale");
 									//REstamos:
 									D.setBudget(D.getBudget()-AssociateCost);
 									D.setDepartmentCapacity(D.getDepartmentCapacity()-1);
@@ -383,13 +448,12 @@ public class SystemSustoImpl implements SystemSusto{
 	}
 	public String toDeployListDepartment() {
 		String r ="";
-	for(int i=0;i<listDepartment.DepartmentQuantity();i++) {
-		
-		r=r + listDepartment.getDepartmentI(i).toString()+"\n";
-		
-	}
-	StdOut.println(r);
-		return r;
+		for(int i=0;i<listDepartment.DepartmentQuantity();i++) {
+			
+			r=r + listDepartment.getDepartmentI(i).toString()+"\n";
+			
+		}
+			return r;
 	}
 	public String toDeployListScientist() {
 		String r ="";		
@@ -429,13 +493,42 @@ public class SystemSustoImpl implements SystemSusto{
 		return r;
 	}
 	@Override
-	public boolean reasignarCientificoProyecto(String rutCientifico, String codProyectoA, String codProyectoN) {
+	public boolean reallocateScientificProject(String rut, String codOld, String codNew) {
 		// TODO Auto-generated method stub
-		return false;
+		boolean answer= false;
+		Staff S = listStaff.searchStafft(rut);
+		if(S instanceof Scientist) {
+			ListProject lp = ((Scientist) S).getListScientificProject();
+			Project ProjectOld = lp.searchProyect(codOld);
+			
+			Project projectNew = listProject.searchProyect(codNew);
+			//Verificar Presupuesto..
+			ListDepartment listDep = projectNew.getListDepartment();
+			
+			for(int i=0;i<listDep.DepartmentQuantity();i++) {
+				Department dep = listDep.getDepartmentI(i);
+				ListProject Lp2 = dep.getListProject();
+				for(int k=0;k<Lp2.projectQuantity();k++) {
+					
+					if(Lp2.getProject(k).getProjectCode().equals(projectNew.getProjectCode())) {
+						StdOut.println("Dale");
+						if(dep.getBudget()>((Scientist) S).getAssociatedCost()) {
+							StdOut.println("Dale");
+							dep.setBudget(dep.getBudget()-((Scientist) S).getAssociatedCost());
+							lp.deleteProject(ProjectOld);
+							lp.enterProject(projectNew);
+							answer=true;
+							
+						}
+					}
+				}
+			}
+		}
+		
+		return answer;
 	}
 	@Override
-	public boolean reasignarCientificoInstalacion(String rutCientifico, String nomInstalacionA,
-			String nomInstalacionN) {
+	public boolean reallocateScientificInstallation(String rut, String nameInstallationOld, String nameInstallationNew) {
 		// TODO Auto-generated method stub
 		return false;
 	}
