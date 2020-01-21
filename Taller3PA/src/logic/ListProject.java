@@ -99,9 +99,15 @@ public class ListProject {
     }
 	@Override
 	public String toString() {
-		return "ListProject [listProject=" + Arrays.toString(listProject) + ", max=" + max + ", cant=" + cant
-				+ ", projectQuantity()=" + projectQuantity() + ", getClass()=" + getClass() + ", hashCode()="
-				+ hashCode() + ", toString()=" + super.toString() + "]";
+		String r="";
+		for(int i=0; i<cant;i++) {
+			r=r+"CODE "+getProject(i).getProjectCode() +" - Name: "+getProject(i).getProjectName()
+					+ "List Department: "+getProject(i).getListDepartment().toString()+
+					"List Areas"+getProject(i).getListArea().toString()
+					+"\n";
+			
+		}
+		return r;
 	}
     
 }

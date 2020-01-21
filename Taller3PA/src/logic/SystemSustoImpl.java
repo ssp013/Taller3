@@ -108,38 +108,38 @@ public class SystemSustoImpl implements SystemSusto{
 		// TODO Auto-generated method stub
 		boolean resp = false;
 		//Check if in the List general exist or not.
-		Installation installation = listInstallation.searchInstallation(nameInstallation);
+		Installation installation = listInstallation.searchInstallation(nameInstallation);		
 		if(installation!=null) {//YESSSS in the list!
 			for(int i=0;i<quantityDpto;i++) {	
 				String department = listDepto[i];
 				int capacity= listCapacity[i];
-				int budget = listBudget[i];	
-				//Creamos el departemanto en la genetal
-				createDepartment(department,capacity,budget);
+				int budget = listBudget[i];
 				//Verificar si existe en el depto general...
-				Department d = listDepartment.searchDepartment(department);
-				if(d!=null) {
-					ListDepartment listDetpto = installation.getlistDepartamentInstalation();
-					Department d1 = listDetpto.searchDepartment(department);
-					if(d1!=null) {
-						int b = d1.getBudget() +budget;
-						d1.setBudget(b);
-						int c = d1.getDepartmentCapacity() + capacity;
-						d1.setDepartmentCapacity(c);
-						resp=true;
-					}else {
-						Department d3 = new Department(department,capacity,budget);
-						listDetpto.enterDepartment(d3);
-						resp = true;
-					}
+				Department d1 = listDepartment.searchDepartment(department);
+				if(d1!=null) {
+					int b = d1.getBudget() +budget;
+					d1.setBudget(b);
+					int c = d1.getDepartmentCapacity() + capacity;
+					d1.setDepartmentCapacity(c);
+					resp=true;
 				}
 			}
 		}else {
 			Installation insta = new Installation(nameInstallation);
 			listInstallation.enterInstallation(insta);
-			resp=true;
+			for(int i=0;i<quantityDpto;i++) {	
+				String department = listDepto[i];
+				int capacity= listCapacity[i];
+				int budget = listBudget[i];
+				ListDepartment listDetpto = insta.getlistDepartamentInstalation();
+				Department d3 = listDepartment.searchDepartment(department);
+				if(d3!=null) {
+					Department d4 = new Department(department,capacity,budget);
+					listDetpto.enterDepartment(d4);
+				}
+				resp=true;
+			}
 		}
-		
 		return resp;
 	}
 	@Override
@@ -151,6 +151,7 @@ public class SystemSustoImpl implements SystemSusto{
 		}
 		return resp;
 	}
+
 	@Override
 	public boolean existsOrNotScientist(String rut) {
 		boolean resp = false;
@@ -177,16 +178,13 @@ public class SystemSustoImpl implements SystemSusto{
 				resp=true;
 			}
 		}
+
 		return resp;
 	}
 	@Override
 	public boolean CreateProjects(String ProjectCode,String nameProject,int budget,String DeptoResp,int quantityAreas,String[] listAreas ) {
 		// TODO Auto-generated method stub
 		boolean resp = false;
-		for(int i=0;i<quantityAreas;i++) {//Create AREAS..
-			CreateAreas(listAreas[i]);
-			
-		}
 		Project proj = listProject.searchProyect(ProjectCode);
 		if(proj!=null) {
 			int t = proj.getTotalBudget()+budget;
@@ -207,18 +205,17 @@ public class SystemSustoImpl implements SystemSusto{
 		}else {
 			Project p = new Project(ProjectCode,nameProject,budget,DeptoResp,quantityAreas);
 			listProject.enterProject(p);
-			resp = true;
-			
 			ListDepartment lD = p.getListDepartment();
 			Department d = listDepartment.searchDepartment(DeptoResp);
 			if(d!=null) {
 				lD.enterDepartment(d);				
 			}
+			
 			ListArea lA = p.getListArea();
 			for(int i=0;i<quantityAreas;i++) {
 				String ar = listAreas[i];
 				Area a = lA.searchArea(ar);
-				if(a!=null) {
+				if(a==null) {
 					Area area = listArea.searchArea(ar);
 					if(area!=null) {
 						Area nueva = new Area(ar);
@@ -282,41 +279,160 @@ public class SystemSustoImpl implements SystemSusto{
 	public boolean RegistryScientist(String nameInstallation,String Rut,String DateIn, String DateOut,String HourIn, String HourOut) {
 		Registry R = new Registry(nameInstallation, Rut, DateIn, DateOut, HourIn, HourOut);
 		listRegistry.enterRegistry(R);
+		Staff SC = listStaff.searchStafft(Rut);
+		if(SC != null && SC instanceof Scientist) {
+			ListRegistry LR = ((Scientist) SC).getListRegistry();
+			LR.enterRegistry(R);
+		}
 		return true;
 	}
+	public boolean EnlistIncome(String installation,String Rut,String dateIn,String timeIn,String dateOut,String timeOut) {
+		boolean resp = false;
+		Staff sc = listStaff.searchStafft(Rut);
+		if(sc instanceof Scientist) {
+			StdOut.println("Dale\n");
+			ListProject proj = ((Scientist) sc).getListScientificProject();
+			for(int k=0;k<proj.projectQuantity();k++) {
+				Project p = proj.getProject(k);
+				for(int j=0;j< p.getListDepartment().DepartmentQuantity();j++) {
+					ListDepartment Ld = p.getListDepartment();
+					for(int l=0;l<Ld.DepartmentQuantity();l++) {
+						Department d = Ld.getDepartmentI(l);
+						for(int a=0;a<listInstallation.getCantInstallation();a++) {
+							Installation insta = listInstallation.getInstallationI(a);
+							Department d2= insta.getlistDepartamentInstalation().searchDepartment(d.getNameDepartament());
+							if(d2!=null  ) {
+								StdOut.println("Dale\n");
+								//Esta en la installation ese departamento..
+								//Ese proyecto pertenece a ese insta, depto, !
+								if(installation.equals(insta.getNameInstalation())) {
+									StdOut.println("Dale\n");
+									//¿Comprobamos si existe un registro?
+									ListRegistry LR = ((Scientist) sc).getListRegistry();
+									for(int i=0;i<LR.RegistrytQuantity();i++) {
+										String nombreInsta = LR.getRegistryI(i).getNameInstallation() ;
+										if(nombreInsta.equals(insta.getNameInstalation())   
+										&& !dateIn.equals(LR.getRegistryI(i).getDateIn())  
+										&& !timeIn.equals(LR.getRegistryI(i).getHourIn())) {
+											StdOut.println("Dale\n");
+											//Si es la misma instalación, distitno fecha y hora.. lo agrego el nuevo registro.
+											Registry re = new Registry(installation,Rut,dateIn,timeIn,dateOut,timeOut);
+											listRegistry.enterRegistry(re);
+											resp=true;
+											
+										}
+									}
+							}
+					
+								
+								
+								
+							}
+							
+							
+						}
+						
+					}
+				}
+			}	
+		}
+		return resp;
+	}
 	public boolean HiringScientist(String Rut, String lastname, String MotherLastName,
-			String Area ,int AssociateCost,String department,String installation,
+			String Area ,int AssociateCost,String department,String installation,int n,
 			String [] listProjectScientist ) {
 		boolean resp=false;
 		Staff S = new Scientist(Rut,lastname,MotherLastName, Area,installation, AssociateCost);
 		listStaff.enterStaff(S);
+		//resp=true;
 		//Verificamos el area.
-		for(int k=0;k<listProjectScientist.length;k++) {
+		for(int k=0;k<n;k++) {
+			
 			String codeProjecto = listProjectScientist[k];
 			Project p = listProject.searchProyect(codeProjecto);
-			if(p!=null && p.getTotalBudget()>=AssociateCost && p.getListArea().searchArea(Area)!=null) {//descontar!!
-				Installation i = listInstallation.searchInstallation(installation);
-				if(i!=null) {
-					ListDepartment LD = i.getlistDepartamentInstalation();
-					Department D = LD.searchDepartment(department);
-					if(D!=null && D.getBudget()>=AssociateCost && D.getDepartmentCapacity()>0) {
-						//REstamos:
-						D.setBudget(D.getBudget()-AssociateCost);
-						D.setDepartmentCapacity(D.getDepartmentCapacity()-1);
-						p.setTotalBudget(p.getTotalBudget()-AssociateCost);
-						resp=true;
+			if(p!=null) {
+					if(p.getTotalBudget()>=AssociateCost && p.getListArea().searchArea(Area)!=null) {//descontar!!
+						
+						StdOut.print("dale");
+						Installation i = listInstallation.searchInstallation(installation);
+							if(i!=null) {
+								StdOut.print("dale");
+								
+								ListDepartment LD = i.getlistDepartamentInstalation();
+								Department D = LD.searchDepartment(department);
+								if(D!=null && D.getBudget()>=AssociateCost && D.getDepartmentCapacity()>0) {
+									StdOut.print("dale");
+									//REstamos:
+									D.setBudget(D.getBudget()-AssociateCost);
+									D.setDepartmentCapacity(D.getDepartmentCapacity()-1);
+									p.setTotalBudget(p.getTotalBudget()-AssociateCost);
+									resp=true;
+								}
+							}	
 					}
-				}	
+
 			}
 		}
 		return resp;
+	}
+	
+	public String toDeployListProject() {
+		String r ="";
+		r=r+listProject.toString();
+		return r;
+	}
+	public String toDeployListDepartment() {
+		String r ="";
+	for(int i=0;i<listDepartment.DepartmentQuantity();i++) {
+		
+		r=r + listDepartment.getDepartmentI(i).toString()+"\n";
+		
+	}
+	StdOut.println(r);
+		return r;
+	}
+	public String toDeployListScientist() {
+		String r ="";		
+		for(int i=0;i<listStaff.StaffQuantity();i++) {
+			if(listStaff.getStaffI(i) instanceof Scientist) {
+				r=r+listStaff.getStaffI(i).toString()+"\n";	
+			}
+		}
+		return r;
+	}
+	public String toDeployListRegistry() {
+		String r ="";		
+		for(int k=0;k<listRegistry.RegistrytQuantity();k++) {
+			r=r+listRegistry.getRegistryI(k).toString()+"\n";
+		}
+		return r;
+	}
+	public String toDeployListInstallation() {
+		String r ="";
+		for(int i=0;i<listInstallation.getCantInstallation();i++) {
+			r=r+listInstallation.getInstallationI(i).getNameInstalation()+"\n";
+			
+			ListDepartment ld = listInstallation.getInstallationI(i).getlistDepartamentInstalation();
+			r=r+" List Department:\n ";
+			for(int k=0;k<ld.DepartmentQuantity();k++) {
+				r=r+ld.getDepartmentI(k).getNameDepartament()+"\n";
+			}
+			
+		}
+		return r;
+	}
+	public String toDeployListArea() {
+		String r ="";
+		for(int i=0;i<listArea.areaQuantity();i++) {
+			r=r+listArea.getAreaI(i).toString()+"\n";
+		}
+		return r;
 	}
 	@Override
 	public boolean reasignarCientificoProyecto(String rutCientifico, String codProyectoA, String codProyectoN) {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
 	@Override
 	public boolean reasignarCientificoInstalacion(String rutCientifico, String nomInstalacionA,
 			String nomInstalacionN) {

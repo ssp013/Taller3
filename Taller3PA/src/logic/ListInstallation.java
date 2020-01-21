@@ -65,23 +65,14 @@ public class ListInstallation {
 			return null;
 		}
 	}
-	public boolean deleateInstallation(String nameInstalation) {
-		boolean resp =false;
-		int k;
-		for(k=0;k<cant;k++) {
-			if(listInstallation[k].getNameInstalation().equals(nameInstalation)) {
-				break;
-			}
+	@Override
+	public String toString() {
+		String r="";
+		for(int i=0; i<cant;i++) {
+			r=r+"Name Installation:  "+getInstallationI(i).getNameInstalation()+
+				"ListDepartment: "+ getInstallationI(i).getlistDepartamentInstalation().toString()
+				+"\n";
 		}
-		if(k==cant) {
-			resp=false;
-		}else {
-			for(int l=k;l<cant-1;l++) {
-				listInstallation[l] = listInstallation[l+1];
-			}
-			resp=true;
-		}
-		return resp;
+		return r;
 	}
-	
 }

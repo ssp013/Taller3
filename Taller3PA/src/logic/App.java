@@ -56,7 +56,7 @@ public class App {
 		}
 		return validacion;
 		}	
-    public static boolean validarHora(String hora){
+    public static boolean validateTime(String hora){
     	boolean valido = false;
         try{
             LocalTime.parse(hora);
@@ -109,7 +109,8 @@ public class App {
 				
 				listDepto[i]=regEnt.getString();
 				listCapacity[i]=regEnt.getInt();
-				listBudget[i]=regEnt.getInt();	
+				listBudget[i]=regEnt.getInt();
+				System.createDepartment(listDepto[i], listCapacity[i], listBudget[i]);
 			}
 			resp= System.CretateInstallation(nameInstallation, quantityDpto, listDepto,listCapacity,listBudget);
 		}
@@ -128,7 +129,8 @@ public class App {
 			int  QuantityAreas = regEnt.getInt();
 			String[] listAreas = new String[QuantityAreas];
 			for(int i =0; i<QuantityAreas;i++) {
-				listAreas[i] = regEnt.getString();				
+				listAreas[i] = regEnt.getString();
+				System.CreateAreas(listAreas[i]);
 			}
 			resp = System.CreateProjects(codeProject,nameProject,budget,deptoResp,QuantityAreas,listAreas);
 		}
@@ -219,7 +221,9 @@ public class App {
 				listCapacity[i]=validateOption();
 				StdOut.println("Enter the budget of the Department: ");
 				listBudget[i]=validateOption();
+				
 			}
+			
 			boolean resp = System.CretateInstallation(NameInstallation, QuantityDeptos, listDepto, listCapacity, listBudget);
 			if(resp== true) {
 				StdOut.println("successful income!");
@@ -233,7 +237,7 @@ public class App {
 
 	
 	public static void CreateDepartment (SystemSusto System)throws IOException {
-		StdOut.println("Insert the name of the Installation:");
+		StdOut.println("Insert the name of the Department:");
 		String NameDepartment = StdIn.readString();
 		if(System.existsOrNotDepartment(NameDepartment)) {
 			StdOut.println("Enter the capacity of the department: ");
@@ -283,7 +287,7 @@ public class App {
 				StdOut.println("Enter Code of the project Nº "+r+" :");
 				listProjectScientist[i] = StdIn.readString();
 			}
-			if(System.HiringScientist(rut,lastname,motherLastName,Area , AssociateCost,department,installation,listProjectScientist )) {
+			if(System.HiringScientist(rut,lastname,motherLastName,Area , AssociateCost,department,installation,n,listProjectScientist )) {
 				StdOut.println("Successful income!");
 			}else {
 					StdOut.println("Erroneous income!");
@@ -307,15 +311,78 @@ public class App {
                 break;
                 case 3:
                 	HireScientist(System);
+                	
                 break;
                 case 4:
                 	StdOut.println("Out!");
                 break;
 
             }
+            
             displayMenuCreateNewEntities();
             option = validateOption();
         }	
+	}
+	public static void  EnlistIncome(SystemSusto System) {
+		StdOut.println("Enter the name of the installation ");
+		String installation = StdIn.readString();
+		while(System.existsOrNotInstallation(installation)){
+			StdOut.println("Error! Enter a correct name of the installation ");
+			installation = StdIn.readString();
+		}
+		
+		StdOut.println("Enter the Rut of the Scientist: ");
+		String Rut = StdIn.readString();
+		while(System.existsOrNotScientist(Rut)){
+			StdOut.println("Error! Enter the Rut of the Scientist: ");
+			Rut = StdIn.readString();
+		}			
+		
+		StdOut.println("Enter the Date (dd/MM/yyyy) : ");
+		String dateIn = StdIn.readString();
+		boolean result = validateDate2(System,dateIn);
+		while(!result) {
+			StdOut.println("Error! Enter the Date (dd/MM/yyyy) :");
+			dateIn = StdIn.readString();
+			result = validateDate2(System,dateIn);
+		}
+		
+		
+		StdOut.println("Enter the hour (hh:mm) : ");
+		String timeIn = StdIn.readString();
+		boolean ValidateTimeIN = validateTime(timeIn);
+		while(!ValidateTimeIN) {
+			StdOut.println("Error! Enter the correct hour (hh:mm)");
+			timeIn = StdIn.readString();
+			ValidateTimeIN = validateTime(timeIn);
+		}
+		if(System.EnlistIncome(installation,Rut,dateIn,timeIn,"0","0")) {
+			StdOut.println("Successful income!");
+		}else {
+				StdOut.println("Erroneous income!");
+		}
+		
+	}
+	public static void menuInputOutput(SystemSusto System) {
+		StdOut.println("1.Register Entry\n 2. Register Output\n 3. Go out ");
+		StdOut.println("Enter an option: ");
+        int op = validateOption();
+        while(op!=3){  	
+            switch(op){
+                case 1:
+                	EnlistIncome(System);
+                break;
+                case 2:
+                	//EnlistarSalida(System);
+                break;
+                case 3:
+                break;
+            }
+    		StdOut.println("1.Register Entry\n 2. Register Output\n 3. Go out ");
+    		StdOut.println("Enter an option: ");
+            op = validateOption();
+        }
+		
 	}
 	public static void menu(SystemSusto System) throws IOException {
 			displayMenu(); 
@@ -329,7 +396,13 @@ public class App {
 	                	loadsTXT = true;
 	                	respTXT=loadTXT(System);
 	                	if(respTXT) {
-	                		StdOut.println("Data loaded successfully");                		
+	                		StdOut.println("Data loaded successfully"); 
+	                		//StdOut.println(System.toDeployListProject());
+	                		//StdOut.println(System.toDeployListArea());
+	                		//StdOut.println(System.toDeployListDepartment());
+	                		//StdOut.println(System.toDeployListScientist());
+	                		//StdOut.println(System.toDeployListInstallation());
+	                		//StdOut.println(System.toDeployListRegistry());
 	                	}else {
 	                		StdOut.println("Check the TXT files folder");
 	                	}
@@ -341,17 +414,18 @@ public class App {
 	                		StdOut.println("You must load the txt files!");
 	                	}
 	                break;
-	                case 6:
-	                	StdOut.println("Thank you very much for occupying SUSTO system ");
-	                break;
-	               /*
 	                case 3:
 	                	if(loadsTXT == true) {
-	                		menuEntradaSalida(System);                		
+	                		menuInputOutput(System);                		
 	                	}else {
 	                		StdOut.println("You must load the txt files!");
 	                	}
 	                break;
+	                case 6:
+	                	StdOut.println("Thank you very much for occupying SUSTO system ");
+	                break;
+	               /*
+
 	                case 4:
 	                	if(loadsTXT == true) {
 	                		menuReasignarCientifico(System);                		

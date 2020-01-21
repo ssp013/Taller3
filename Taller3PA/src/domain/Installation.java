@@ -51,7 +51,11 @@ public class Installation {
 	 */
 	@Override
 	public String toString() {
-		return "Instalation [nameInstalation=" + nameInstalation + ", listDepartamentInstalation="
-				+ listDepartamentInstalation + "]";
+		return "Instalation "
+				+ "[nameInstalation=" + nameInstalation 
+				+ ", listDepartamentInstalation="
+				+ listDepartamentInstalation.toString() 
+				
+				+ "]";
 	}
 }

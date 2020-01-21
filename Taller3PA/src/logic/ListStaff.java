@@ -80,7 +80,7 @@ public class ListStaff {
 	@Override
 	public String toString() {
 		return "ListStaff [listStaff=" + Arrays.toString(listStaff) + ", max=" + max + ", cant=" + cant
-				+ "]";
+				+ "]\n";
 	}
 	
 }

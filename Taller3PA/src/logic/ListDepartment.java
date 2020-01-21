@@ -71,9 +71,14 @@ public class ListDepartment {
 	}
 	@Override
 	public String toString() {
-		return "ListDepartment [listDepto=" + Arrays.toString(listDepto) + ", cant=" + cant + ", max=" + max
-				+ ", DepartmentQuantity()=" + DepartmentQuantity() + ", getClass()=" + getClass() + ", hashCode()="
-				+ hashCode() + ", toString()=" + super.toString() + "]";
+		String r="";
+		for(int i=0; i<cant;i++) {
+			r=r+"Name Department:  "+getDepartmentI(i).getNameDepartament() +" - Budget: "+getDepartmentI(i).getBudget()
+					+ "Capacity: "+getDepartmentI(i).getDepartmentCapacity()+
+					"List Projects: "+getDepartmentI(i).getListProject().toString()
+					+"\n";
+			
+		}
+		return r;
 	}
-
 }

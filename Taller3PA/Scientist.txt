@@ -1,2 +1,2 @@
-191006577,Sebastian,Sanchez,Perez,quimica,10,01
-20,Tomas,Sandoval,TOrres,fisica,30,02
+19.100.657-7,Sebastian,Sanchez,Perez,quimica,10,01
+18.100.657-7,Tomas,Sandoval,Perez,matematica,20,01

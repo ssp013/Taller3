@@ -48,5 +48,16 @@ public interface SystemSusto {
 	public boolean existsOrNotInstallation(String nameInstallation);
 	public boolean existsOrNotDepartment(String nameDepartment);
 	public boolean existsOrNotScientist(String rut);
-	public boolean HiringScientist(String Rut, String lastname, String MotherLastName, String Area ,int AssociateCost,String department,String installation,String [] listProjectScientist );
+	public boolean HiringScientist(String Rut, String lastname, String MotherLastName, String Area ,int AssociateCost,String department,String installation,int n,String [] listProjectScientist );
+	
+	
+	public boolean EnlistIncome(String installation,String Rut,String dateIn,String timeIn,String dateOut,String timeOut);
+	
+	public String toDeployListProject();
+	public String toDeployListDepartment();
+	public String toDeployListScientist();
+	public String toDeployListInstallation();
+	public String toDeployListArea();
+	public String toDeployListRegistry();
+	
 }
