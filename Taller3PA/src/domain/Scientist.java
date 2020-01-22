@@ -98,7 +98,10 @@ public  class Scientist extends Staff {
 	 * (non-Javadoc)
 	 * @see java.long.Objext#toString()
 	 */
-
+	
+	
+	
+	
 	@Override
 	public String toString() {
 		return "Scientist [Rut=" + getRut() + ", Name=" + getName() + ", LastName=" + getLastName() + ", MotherLastName="

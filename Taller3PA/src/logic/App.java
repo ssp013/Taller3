@@ -185,20 +185,6 @@ public class App {
 			return false;
 		}
 	}		
-	public static void getTxtScientist(SystemSusto System)throws IOException{
-
-	}
-	public static void getTxtProjects(SystemSusto System)throws IOException{
-
-	}
-	public static void getTxtInstallation(SystemSusto System)throws IOException{
-		
-	}
-	public static void toUpdateTXT(SystemSusto System)throws IOException{
-		getTxtScientist(System);
-		getTxtProjects(System);
-		getTxtInstallation(System);
-	}
 	public static void displayMenuCreateNewEntities() {
 		StdOut.println (" 1.Create Installation\n 2.Create Department\n 3. Hire Scientist\n 4. Exit");
 	}
@@ -265,19 +251,38 @@ public class App {
 		if(System.existsOrNotScientist(rut)) {
 			StdOut.println("Enter the name of Scientist:");
 			String name = StdIn.readString();
+			
 			StdOut.println("Enter the last Name of Siencitst ");
 			String lastname = StdIn.readString();
+			
 			StdOut.println("Enter the mother last name  of Scientist ");
 			String motherLastName = StdIn.readString();
+			
 			StdOut.println("Enter your area of expertise: ");
 			String Area = StdIn.readString();
+			
+			while(System.existsOrArea(Area)){
+				StdOut.println("Error! Enter your area of expertise: ");
+				Area = StdIn.readString();
+			}
+			
 			StdOut.println("Enter the associate cost: ");
 			int AssociateCost = validateOption();
+			
 			StdOut.println("Enter the department that will be assigned  "+name+" "+lastname+" : ");
 			String department = StdIn.readString();
+			while(System.existsOrNotDepartment(department)){
+				StdOut.println("Error! Enter the department that will be assigned  "+name+" "+lastname+" : ");
+				department = StdIn.readString();
+			}
+			
+			
 			StdOut.println("Enter the Installation that will be assigned to "+name+" "+lastname+" : ");
 			String installation = StdIn.readString();
-			
+			while(System.existsOrNotInstallation(installation)){
+				StdOut.println("ERROR! Enter the Installation that will be assigned to "+name+" "+lastname+" : ");
+				installation = StdIn.readString();
+			}
 			//Solicitar los proyectos a los cuáles se asignará:
 			StdOut.println("Enter quantity of projects : ");
 			int n = validateOption();	
@@ -286,6 +291,11 @@ public class App {
 				int r = i+1;
 				StdOut.println("Enter Code of the project Nº "+r+" :");
 				listProjectScientist[i] = StdIn.readString();
+				while(System.existsOrNotProject(listProjectScientist[i])){
+					StdOut.println("Error! Enter Code of the project Nº \"+r+\" : ");
+					listProjectScientist[i] = StdIn.readString();
+				}	
+				
 			}
 			if(System.HiringScientist(rut,lastname,motherLastName,Area , AssociateCost,department,installation,n,listProjectScientist )) {
 				StdOut.println("Successful income!");
@@ -311,7 +321,7 @@ public class App {
                 break;
                 case 3:
                 	HireScientist(System);
-            		StdOut.println(System.toDeployListDepartment());
+            
                 	
                 break;
                 case 4:
@@ -456,7 +466,6 @@ public class App {
 				StdOut.println("Erroneous income!");
 		}
 	}
-	
 	public static void reallocateScientificInstallation(SystemSusto System) {
 		StdOut.println("Enter the scientist's rut (XX.XXX.XXX-X): ");
 		String rut = StdIn.readString();
@@ -495,11 +504,9 @@ public class App {
             switch(op){
             	case 1:
             		reallocateScientificProject(System);
-            		
             	break;
             	case 2: 
             		reallocateScientificInstallation(System);
-            		StdOut.println(System.toDeployListInstallation());
                 break;
             	case 3:
             		StdOut.println("successful exit!");
@@ -510,6 +517,20 @@ public class App {
             op = validateOption();
         }
     }
+	public static void getTxtScientist(SystemSusto System)throws IOException{
+
+	}
+	public static void getTxtProjects(SystemSusto System)throws IOException{
+
+	}
+	public static void getTxtInstallation(SystemSusto System)throws IOException{
+		
+	}
+	public static void toUpdateTXT(SystemSusto System)throws IOException{
+		getTxtScientist(System);
+		getTxtProjects(System);
+		getTxtInstallation(System);
+	}	
 	public static void menu(SystemSusto System) throws IOException {
 			displayMenu(); 
 	        StdOut.println("Enter a choice: ");

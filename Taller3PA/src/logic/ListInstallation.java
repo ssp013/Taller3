@@ -1,5 +1,6 @@
 package logic;
 import domain.Installation;
+import domain.Project;
 
 /**
  * @author ssp013
@@ -65,6 +66,30 @@ public class ListInstallation {
 			return null;
 		}
 	}
+    /**
+	 * @param P ,The application parameter is a project that wants to be removed.
+	 * @return returns true or false, in case you can delete.
+	 */
+    public boolean deleteInstallation(Installation I) {
+    	boolean resp = false;
+    	int k;
+    	for(k=0;k<cant;k++){
+    		if(listInstallation[k].getNameInstalation().equals(I.getNameInstalation())){
+    			break;
+    		}
+    	}
+    	if(k==cant){
+    		resp = false;
+    	}else {
+    		for(int j=k;k<cant-1;j++) {
+    			listInstallation[j]=listInstallation[j+1];
+    		}
+    		cant--;
+    		resp = true;
+    	}
+    	return resp;
+    }
+
 	@Override
 	public String toString() {
 		String r="";

@@ -45,15 +45,19 @@ public interface SystemSusto {
     //PostCondiciones: Fecha validada.
 	public boolean RegistryScientist(String nameInstallation,String Rut,String DateIn, String DateOut,String HourIn, String HourOut);
 	public boolean CreateAreas(String nameAreas);
+	
 	public boolean existsOrNotInstallation(String nameInstallation);
 	public boolean existsOrNotDepartment(String nameDepartment);
 	public boolean existsOrNotScientist(String rut);
 	public boolean existsOrNotProject(String code);
+	public boolean existsOrArea(String nameArea);
+	
 	public boolean HiringScientist(String Rut, String lastname, String MotherLastName, String Area ,int AssociateCost,String department,String installation,int n,String [] listProjectScientist );
 	
 	
 	public boolean EnlistIncome(String installation,String Rut,String dateIn,String timeIn,String dateOut,String timeOut);
 	public boolean EnlistExit(String installation,String Rut,String dateIn,String timeIn,String dateOut,String timeOut);
+	
 	public String toDeployListProject();
 	public String toDeployListDepartment();
 	public String toDeployListScientist();
