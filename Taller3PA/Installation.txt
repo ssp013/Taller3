@@ -1,2 +1,2 @@
-insta1,2,depto1,2,100000,depto2,3,200000
-insta2,1,depto3,1,100000
+insta1,2,depto1,10,100,depto2,20,200
+insta2,1,depto3,30,100

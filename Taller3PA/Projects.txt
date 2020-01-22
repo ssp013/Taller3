@@ -1,2 +1,3 @@
-01,proyecto1,100,depto1,2,quimica,matematica
-02,proyecto2,200,depto2,1,fisica
+01,proyecto1,10,depto1,2,quimica,matematica
+02,proyecto2,20,depto2,1,fisica
+03,proyecto3,30,depto3,1,programacion

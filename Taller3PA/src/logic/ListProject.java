@@ -46,7 +46,7 @@ public class ListProject {
     	boolean resp = false;
     	int k;
     	for(k=0;k<cant;k++){
-    		if(listProject[k].getProjectName().equals(P.getProjectName())){
+    		if(listProject[k].getProjectCode().equals(P.getProjectCode())){
     			break;
     		}
     	}
@@ -56,6 +56,7 @@ public class ListProject {
     		for(int j=k;k<cant-1;j++) {
     			listProject[j]=listProject[j+1];
     		}
+    		cant--;
     		resp = true;
     	}
     	return resp;

@@ -64,7 +64,7 @@ public class ListStaff {
 	 * @return a Staff returns, in the case that there is the position sought
 	 */
 	public Staff getStaffI(int i) {
-		if(i<=0 && i<cant) {
+		if(i>=0 && i<cant) {
 			return listStaff[i];
 		}else {
 			return null;
@@ -77,10 +77,6 @@ public class ListStaff {
 	public int StaffQuantity() {
 		return cant;
 	}
-	@Override
-	public String toString() {
-		return "ListStaff [listStaff=" + Arrays.toString(listStaff) + ", max=" + max + ", cant=" + cant
-				+ "]\n";
-	}
+
 	
 }

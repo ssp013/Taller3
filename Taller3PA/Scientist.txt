@@ -1,2 +1,2 @@
 19.100.657-7,Sebastian,Sanchez,Perez,quimica,10,01
-18.100.657-7,Tomas,Sandoval,Perez,matematica,20,01
+12.440.322-7,Zulema,Perez,Albornoz,quimica,10,01

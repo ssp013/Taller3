@@ -311,6 +311,7 @@ public class App {
                 break;
                 case 3:
                 	HireScientist(System);
+            		StdOut.println(System.toDeployListDepartment());
                 	
                 break;
                 case 4:
@@ -482,8 +483,9 @@ public class App {
             switch(op){
             	case 1:
             		reallocateScientificProject(System);
+            		StdOut.println(System.toDeployListScientist());
             	break;
-            	case 2:
+            	case 2: 
             		//reallocateScientificInstallation(System);
                 break;
             	case 3:
@@ -507,11 +509,13 @@ public class App {
 	                	loadsTXT = true;
 	                	respTXT=loadTXT(System);
 	                	if(respTXT) {
-	                		StdOut.println("Data loaded successfully"); 
+	                		StdOut.println("Data loaded successfully");
+	       
 	                		//StdOut.println(System.toDeployListProject());
 	                		//StdOut.println(System.toDeployListArea());
 	                		//StdOut.println(System.toDeployListDepartment());
 	                		//StdOut.println(System.toDeployListScientist());
+	                		
 	                		//StdOut.println(System.toDeployListInstallation());
 	                		//StdOut.println(System.toDeployListRegistry());
 	                	}else {
