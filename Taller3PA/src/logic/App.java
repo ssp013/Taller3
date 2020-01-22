@@ -457,24 +457,36 @@ public class App {
 		}
 	}
 	
-	public static void reasignarCientificoInstalacion(SystemSusto System) {
-		/*StdOut.println("Ingrese el rut del cientifico (XX.XXX.XXX-X): ");
-		String rutCientifico = StdIn.readString();
-		boolean respuesta=validarRut(rutCientifico);
-		while(respuesta != true) {
-			StdOut.println("Ingrese el rut del cientifico: ");
-			rutCientifico = StdIn.readString();
-			respuesta=validarRut(rutCientifico);
+	public static void reallocateScientificInstallation(SystemSusto System) {
+		StdOut.println("Enter the scientist's rut (XX.XXX.XXX-X): ");
+		String rut = StdIn.readString();
+		boolean answer=validarRut(rut);
+		while(answer != true) {
+			StdOut.println("Error! Enter the scientist's rut (XX.XXX.XXX-X) : ");
+			rut = StdIn.readString();
+			answer=validarRut(rut);
 		}
-		StdOut.println("Ingrese el nombre de la instalación anterior:");
-		String nomInstalacionA = StdIn.readString();
-		StdOut.println("Ingrese el nombre de la instalación nueva:");
-		String nomInstalacionN= StdIn.readString();
-		if(System.reasignarCientificoInstalacion(rutCientifico, nomInstalacionA, nomInstalacionN)) {
-			StdOut.println("Reasignación correcta!");
+		
+		StdOut.println("Enter the name of the previous Installation:");
+		String instaOld = StdIn.readString();
+		while(System.existsOrNotInstallation(instaOld)){
+			StdOut.println("Error! Enter the name of the previous Installation: ");
+			instaOld = StdIn.readString();
+		}			
+		
+		
+		StdOut.println("Enter the name of the new Installation:");
+		String instaNew= StdIn.readString();
+		while(System.existsOrNotInstallation(instaNew)){
+			StdOut.println("Error! Enter the name of the new Installation: ");
+			instaNew = StdIn.readString();
+		}	
+		
+		if( System.reallocateScientificInstallation(rut, instaOld, instaNew)   ) {
+			StdOut.println("Successful income!");
 		}else {
-			StdOut.println("Reasignación incorrecta!");
-		}	*/	
+				StdOut.println("Erroneous income!");
+		}	
 	}
 	public static void ScientificReassignmenu(SystemSusto System) {
 		StdOut.println("1.Reassign scientist by project\n 2. Reassign scientist by installation\n 3. Leave");
@@ -483,10 +495,11 @@ public class App {
             switch(op){
             	case 1:
             		reallocateScientificProject(System);
-            		StdOut.println(System.toDeployListScientist());
+            		
             	break;
             	case 2: 
-            		//reallocateScientificInstallation(System);
+            		reallocateScientificInstallation(System);
+            		StdOut.println(System.toDeployListInstallation());
                 break;
             	case 3:
             		StdOut.println("successful exit!");

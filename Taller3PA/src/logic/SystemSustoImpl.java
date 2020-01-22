@@ -282,24 +282,37 @@ public class SystemSustoImpl implements SystemSusto{
 			
 			if(SN instanceof Scientist) {
 				ListProject lP = ((Scientist) SN).getListScientificProject();
-				Project p = listProject.searchProyect(CodProject);
-				if(p!=null) {
-					
-					for(int i=0;i<listDepartment.DepartmentQuantity();i++) {
-						ListProject LPD = listDepartment.getDepartmentI(i).getListProject();
-						Project pD = LPD.searchProyect(p.getProjectCode());
-						if(pD!=null) {
-							if(listDepartment.getDepartmentI(i).getBudget()>AssociatedCost ) {
-								if(listDepartment.getDepartmentI(i).getDepartmentCapacity()> 0) {
-									listDepartment.getDepartmentI(i).setBudget(	 listDepartment.getDepartmentI(i).getBudget()-AssociatedCost);
-									listDepartment.getDepartmentI(i).setDepartmentCapacity(listDepartment.getDepartmentI(i).getDepartmentCapacity()-1);
-									listStaff.enterStaff(SN);
-									lP.enterProject(p);
-									resp=true;
+				ListInstallation LI = ((Scientist) SN).getlistInstallationScientist();
+				for(int x=0;x<listInstallation.getCantInstallation();x++) {
+					Installation IGlobal = listInstallation.getInstallationI(x);
+					ListDepartment lDInstallation =IGlobal.getlistDepartamentInstalation();
+					Project p = listProject.searchProyect(CodProject);
+					if(p!=null) {
+						
+						for(int i=0;i<listDepartment.DepartmentQuantity();i++) {
+							ListProject LPD = listDepartment.getDepartmentI(i).getListProject();
+							Project pD = LPD.searchProyect(p.getProjectCode());
+							if(pD!=null) {
+								Department DSearchInstallation = lDInstallation.searchDepartment(listDepartment.getDepartmentI(i).getNameDepartament());
+								if(DSearchInstallation!=null) {
+									if(listDepartment.getDepartmentI(i).getBudget()>AssociatedCost ) {
+										if(listDepartment.getDepartmentI(i).getDepartmentCapacity()> 0) {
+											listDepartment.getDepartmentI(i).setBudget(	 listDepartment.getDepartmentI(i).getBudget()-AssociatedCost);
+											listDepartment.getDepartmentI(i).setDepartmentCapacity(listDepartment.getDepartmentI(i).getDepartmentCapacity()-1);
+											listStaff.enterStaff(SN);
+											LI.enterInstallation(IGlobal);
+											lP.enterProject(p);
+											resp=true;
+										}
+									}
+									
 								}
+								
+
 							}
 						}
 					}
+					
 				}
 			}
 			
@@ -524,6 +537,13 @@ public class SystemSustoImpl implements SystemSusto{
 					r=r+"Code"+p.getProjectCode()+"\n" ;
 					
 				}
+				ListInstallation lInsta= s.getlistInstallationScientist();
+				r=r+"List Installation:\n";
+				for(int k=0;k<lInsta.getCantInstallation();k++) {
+					 lInsta.getInstallationI(k).getNameInstalation();
+					r=r+"Name Installation: "+lInsta.getInstallationI(k).getNameInstalation()+"\n" ;
+					
+				}
 			}
 				
 			}	
@@ -596,6 +616,40 @@ public class SystemSustoImpl implements SystemSusto{
 	@Override
 	public boolean reallocateScientificInstallation(String rut, String nameInstallationOld, String nameInstallationNew) {
 		// TODO Auto-generated method stub
-		return false;
+		boolean answer= false;
+		Staff S = listStaff.searchStafft(rut);
+		if(S instanceof Scientist) {
+			
+			
+			
+			Installation I = listInstallation.searchInstallation(nameInstallationOld);
+			ListDepartment LDInstallation = I.getlistDepartamentInstalation();
+			
+			ListProject lp = ((Scientist) S).getListScientificProject();
+	
+				
+				for(int i=0;i<lp.projectQuantity();i++) {
+					Project pro = lp.getProject(i);
+					ListDepartment ListDeptoProject = pro.getListDepartment();
+					for(int k=0;k<ListDeptoProject.DepartmentQuantity();k++) {
+						Department DeptoSearch = LDInstallation.searchDepartment(ListDeptoProject.getDepartmentI(i).getNameDepartament());
+						if(DeptoSearch!=null) {
+							//Lo encontramos!!
+							
+							
+							answer=true;
+						}
+						
+					}
+				}
+			
+	
+			
+			
+
+
+		}
+		
+		return answer;
 	}
 }

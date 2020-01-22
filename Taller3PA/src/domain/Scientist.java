@@ -2,6 +2,7 @@
  * 
  */
 package domain;
+import logic.ListInstallation;
 import logic.ListProject;
 import logic.ListRegistry;
 
@@ -18,6 +19,7 @@ public  class Scientist extends Staff {
 
 	private int AssociatedCost;
 	private ListProject listScientificProject;
+	private ListInstallation listInstallationScientist;
 	private ListRegistry listRegistry;
 
 	
@@ -34,6 +36,7 @@ public  class Scientist extends Staff {
 		this.AssociatedCost =AssociatedCost;
 		listScientificProject = new ListProject(100);
 		listRegistry = new ListRegistry(100);
+		listInstallationScientist = new ListInstallation(100);
 		
 	}
 	
@@ -76,6 +79,19 @@ public  class Scientist extends Staff {
 	 */
 	public void setListRegistry(ListRegistry listRegistry) {
 		this.listRegistry = listRegistry;
+	}
+	/**
+	 * @return the listInstallationScientist
+	 */
+	public ListInstallation getlistInstallationScientist() {
+		return listInstallationScientist;
+	}
+	
+	/**
+	 * @param listInstallationScientist the listInstallationScientist to set
+	 */
+	public void setlistInstallationScientist(ListInstallation listInstallationScientist) {
+		this.listInstallationScientist = listInstallationScientist;
 	}
 	
 	/**
