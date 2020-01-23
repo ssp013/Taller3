@@ -297,7 +297,7 @@ public class App {
 				}	
 				
 			}
-			if(System.HiringScientist(rut,lastname,motherLastName,Area , AssociateCost,department,installation,n,listProjectScientist )) {
+			if(System.HiringScientist(rut,name,lastname,motherLastName,Area , AssociateCost,department,installation,n,listProjectScientist )) {
 				StdOut.println("Successful income!");
 			}else {
 					StdOut.println("Erroneous income!");
@@ -530,8 +530,89 @@ public class App {
 		getTxtScientist(System);
 		getTxtProjects(System);
 		getTxtInstallation(System);
-	}	
-	public static void menu(SystemSusto System) throws IOException {
+	}
+	public static void displayMenuReports() {
+		StdOut.println("1.Personnel list\n 2.Project list\n 3.Costs per project\n 4.Hours worked\n 5.Movements\n 6.Exit");
+	}
+	public static void displayListPersonal() {
+		StdOut.println("1.for Installation\n 2.for Project\n  3.Exit");
+	}
+	public static void displayListPersonalInstallation(SystemSusto System) {
+		StdOut.println(System.displayListPersonalInstallationPrint());
+	}
+	public static void displayListPersonalDepartment(SystemSusto System) {
+		StdOut.println(System.displayListPersonalDepartmentPrint());
+	}
+	public static void PersonnelListing(SystemSusto System) {
+		displayListPersonal();
+        StdOut.println("Enter a option:  ");
+        int option = validateOption();
+        while(option!=3){
+            switch(option){
+                case 1:
+                	displayListPersonalInstallation(System);
+                break;
+                case 2:
+                	displayListPersonalDepartment(System);
+                break;
+                case 3:
+                	StdOut.println("successful exit!");
+                break;
+            }
+            displayListPersonal();
+        	option = validateOption();
+        }
+	}
+	public static void projectlisting(SystemSusto System) {
+		StdOut.println(System.displayprojectListing());
+	}
+	
+	public static void DisCostPerProject(SystemSusto System) {
+		StdOut.println("Enter the code of the project:");
+		String CodeProject= StdIn.readString();
+		while(System.existsOrNotProject(CodeProject)){
+			StdOut.println("Error! Enter the code of the project: ");
+			CodeProject = StdIn.readString();
+		}
+		
+		StdOut.println(System.CostPerProject(CodeProject));
+	}
+	
+	
+	  	
+	public static void MenuReports(SystemSusto System)throws IOException, ParseException  {
+		displayMenuReports();
+        StdOut.println("Enter a option:  ");
+        int option = validateOption();
+        while(option!=6){
+            switch(option){
+                case 1:
+                	
+                	PersonnelListing(System);
+                	
+                break;
+                case 2:
+                	projectlisting(System);
+                break;
+                case 3:
+                	DisCostPerProject(System);
+                break;
+                case 4:
+                	StdOut.println( System.HoursWorked() );
+                break;
+                
+                case 5:
+                	StdOut.println(System.Movements());
+                break;
+                case 6:
+                	StdOut.println("successful exit!");
+                break;
+            }
+            displayMenuReports();
+        	option = validateOption();
+        }
+	}
+	public static void menu(SystemSusto System) throws IOException, ParseException {
 			displayMenu(); 
 	        StdOut.println("Enter a choice: ");
 	        int op = validateOption();
@@ -577,22 +658,16 @@ public class App {
 	                		StdOut.println("You must load the txt files!");
 	                	}
 	                break;
-	                
-	                
-	                
-	                case 6:
-	                	StdOut.println("Thank you very much for occupying SUSTO system ");
-	                break;
-	               /*
 	                case 5:
 	                	if(loadsTXT == true) {
-	                		menuReportesDePersonalYCostos(System);              		
+	                		MenuReports(System);                		
 	                	}else {
 	                		StdOut.println("You must load the txt files!");
 	                	}
 	                break;
-	            */
-
+	                case 6:	                	
+	                	StdOut.println("Thank you very much for occupying SUSTO system ");
+	                break;
 	            }
 	            displayMenu();
 	            StdOut.println("Insert a option:  ");
@@ -601,7 +676,7 @@ public class App {
 	        toUpdateTXT(System);
 	        
 	}
-	public static void main(String []args) throws IOException {
+	public static void main(String []args) throws IOException, ParseException {
 		StdOut.println("******** Welcome to the SUSTO system ********");
 		SystemSusto System =  new SystemSustoImpl();
 		/*StdOut.println("Insert the date: (dd/MM/yyyy) :");

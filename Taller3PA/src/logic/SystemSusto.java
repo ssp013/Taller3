@@ -6,6 +6,8 @@ package logic;
  */
 
 import java.io.IOException;
+import java.text.ParseException;
+
 import ucn.ArchivoEntrada;
 public interface SystemSusto {
 	
@@ -52,11 +54,19 @@ public interface SystemSusto {
 	public boolean existsOrNotProject(String code);
 	public boolean existsOrArea(String nameArea);
 	
-	public boolean HiringScientist(String Rut, String lastname, String MotherLastName, String Area ,int AssociateCost,String department,String installation,int n,String [] listProjectScientist );
+	public boolean HiringScientist(String Rut,String name, String lastname, String MotherLastName, String Area ,int AssociateCost,String department,String installation,int n,String [] listProjectScientist );
 	
 	
 	public boolean EnlistIncome(String installation,String Rut,String dateIn,String timeIn,String dateOut,String timeOut);
 	public boolean EnlistExit(String installation,String Rut,String dateIn,String timeIn,String dateOut,String timeOut);
+	
+	public String displayListPersonalDepartmentPrint();
+	public String displayListPersonalInstallationPrint();
+	public String Movements();
+	
+	public String displayprojectListing();
+	public String CostPerProject(String CodeProject);
+	public String  HoursWorked() throws ParseException;
 	
 	public String toDeployListProject();
 	public String toDeployListDepartment();
@@ -64,5 +74,6 @@ public interface SystemSusto {
 	public String toDeployListInstallation();
 	public String toDeployListArea();
 	public String toDeployListRegistry();
+	
 	
 }

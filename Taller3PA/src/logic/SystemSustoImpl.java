@@ -3,9 +3,15 @@
  */
 package logic;
 import ucn.*;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.Date;
 
 import domain.*;
 /**
@@ -479,11 +485,11 @@ public class SystemSustoImpl implements SystemSusto{
 		}
 		return resp;
 	}
-	public boolean HiringScientist(String Rut, String lastname, String MotherLastName,
+	public boolean HiringScientist(String Rut, String name,String lastname, String MotherLastName,
 			String Area ,int AssociateCost,String department,String installation,int n,
 			String [] listProjectScientist ) {
 		boolean resp=false;
-		Staff S = new Scientist(Rut,lastname,MotherLastName, Area,installation, AssociateCost);
+		Staff S = new Scientist(Rut,name,lastname,MotherLastName, Area, AssociateCost);
 		
 		
 		//Verificamos el area.
@@ -515,7 +521,19 @@ public class SystemSustoImpl implements SystemSusto{
 										D.setDepartmentCapacity(D.getDepartmentCapacity()-1);
 										p.setTotalBudget(p.getTotalBudget()-AssociateCost);	
 										
+						
+										
 										listStaff.enterStaff(S);
+										//New movement:
+					
+									
+										DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+										LocalDateTime now = LocalDateTime.now(); 
+										String dateNow = formatter.format(now);						
+									
+										
+										Movement M = new Hiring(Rut,department,dateNow,installation);
+										listMovement.enterMovement(M);
 										Installation ins = new Installation(installation);
 										
 										resp=true;
@@ -535,7 +553,23 @@ public class SystemSustoImpl implements SystemSusto{
 	
 	public String toDeployListProject() {
 		String r ="";
-		r=r+listProject.toString();
+		for(int i=0;i<listProject.projectQuantity();i++) {
+			Project p = listProject.getProject(i);
+			r=r+"Name: "+p.getProjectName()+"\n";
+			r=r+"List Department:\n";
+			ListDepartment ld = p.getListDepartment();
+			for(int j=0;j<ld.DepartmentQuantity();j++) {
+				r=r+"   - "+ld.getDepartmentI(j).getNameDepartament()+"\n";
+				ListProject lPE =ld.getDepartmentI(j).getListProject();
+				for(int m=0;m<lPE.projectQuantity();m++) {
+					Project p1= lPE.getProject(m);
+					Project p3 = listProject.searchProyect(p1.getProjectCode());
+					if(p3!=null) {
+						r=r+"        * "+ld.getDepartmentI(j).getNameDepartament()+"\n";
+					}
+				}
+			}
+		}
 		return r;
 	}
 	public String toDeployListDepartment() {
@@ -635,6 +669,17 @@ public class SystemSustoImpl implements SystemSusto{
 							dep.setDepartmentCapacity(dep.getDepartmentCapacity()-1);
 							lp.deleteProject(ProjectOld);
 							lp.enterProject(projectNew);
+							
+							DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+							LocalDateTime now = LocalDateTime.now(); 
+							String dateNow = formatter.format(now);						
+						
+							
+							Movement M = new Reallocation(rut,dep.getNameDepartament(),dateNow,"","",codOld,codNew);
+							listMovement.enterMovement(M);
+
+							
+							
 							answer=true;
 							
 						}
@@ -646,7 +691,136 @@ public class SystemSustoImpl implements SystemSusto{
 		return answer;
 	}
 	@Override
-	public boolean reallocateScientificInstallation(String rut, String nameInstallationOld, String nameInstallationNew) {
+	public String displayListPersonalInstallationPrint() {
+		String r="";
+		r=r+"********** List of personnel by installation *********\n";
+		for(int i=0;i<listInstallation.getCantInstallation();i++) {
+			r=r+"Name: "+listInstallation.getInstallationI(i).getNameInstalation()+"\n";
+			r=r+"List departments: \n";
+			ListDepartment lDepart= listInstallation.getInstallationI(i).getlistDepartamentInstalation();
+			for(int j=0;j<lDepart.DepartmentQuantity();j++) {
+					Department deptoSearch = listDepartment.searchDepartment(lDepart.getDepartmentI(j).getNameDepartament());
+					if(deptoSearch!=null) {
+						r=r+"- "+deptoSearch.getNameDepartament()+"\n";
+						ListProject LP = deptoSearch.getListProject();
+						
+						for(int a=0;a<LP.projectQuantity();a++) {
+							
+							r=r+"  * "+LP.getProject(a).getProjectName()+"\n";
+							
+							for(int m=0;m<listStaff.StaffQuantity();m++) {
+								Staff St=listStaff.getStaffI(m);
+								if(St instanceof Scientist) {
+									ListProject lP2=((Scientist) St).getListScientificProject();
+									for(int g=0;g<lP2.projectQuantity();g++) {
+										Project p2 = lP2.getProject(g);
+										Project psearch = LP.searchProyect(p2.getProjectCode());
+										if(psearch!=null) {
+											r=r+"      - "+St.getName()+"\n"; 
+										}
+										
+									}
+									
+								}
+							}
+							
+						}
+						
+						
+					}
+			}	
+		}
+		return r;
+		
+	}
+	@Override
+	public String displayListPersonalDepartmentPrint() {
+		String r="";
+		r=r+"********** List of personnel by department *********\n";		
+			for(int j=0;j<listDepartment.DepartmentQuantity();j++) {
+					Department deptoSearch = listDepartment.searchDepartment(listDepartment.getDepartmentI(j).getNameDepartament());
+					if(deptoSearch!=null) {
+						r=r+"Name Department: "+deptoSearch.getNameDepartament()+"\n";
+						ListProject LP = deptoSearch.getListProject();
+						
+						for(int a=0;a<LP.projectQuantity();a++) {
+							
+							r=r+"  * "+LP.getProject(a).getProjectName()+"\n";
+							
+							for(int m=0;m<listStaff.StaffQuantity();m++) {
+								Staff St=listStaff.getStaffI(m);
+								if(St instanceof Scientist) {
+									ListProject lP2=((Scientist) St).getListScientificProject();
+									for(int g=0;g<lP2.projectQuantity();g++) {
+										Project p2 = lP2.getProject(g);
+										Project psearch = LP.searchProyect(p2.getProjectCode());
+										if(psearch!=null) {
+											r=r+"      - "+St.getName()+"\n"; 
+										}
+										
+									}
+									
+								}
+							}
+							
+						}
+						
+					
+					}
+			}	
+		
+		return r;	
+	}
+	@Override 
+	public String displayprojectListing() {
+		String r="";
+		r=r+"********** Listining Project *********\n";	
+		for(int l=0;l<listProject.projectQuantity();l++) {
+			r=r+" *"+listProject.getProject(l).getProjectName()+"\n";
+			for(int i=0;i<listStaff.StaffQuantity();i++) {
+				
+				Staff s= listStaff.getStaffI(i);
+				if(s instanceof Scientist) {
+					ListProject lp= ((Scientist) s).getListScientificProject();
+					for(int k=0;k<lp.projectQuantity();k++) {
+						Project p = lp.getProject(k);
+							if(listProject.getProject(l).getProjectCode().equals(p.getProjectCode())) {
+								
+							r=r+" -"+s.getName() + " "+s.getLastName()+"\n";
+						}
+					}
+				}
+			}
+			
+		}
+		return r;
+	}
+	@Override
+	public String CostPerProject(String CodeProject) {
+		String r="";
+		Project p= listProject.searchProyect(CodeProject);
+		if(p!=null) {
+			r=r+"Name: "+p.getProjectName()+", Budget: $"+p.getTotalBudget()+"\n";
+			
+			r=r+"List Scientist:\n";
+			for(int i=0;i<listStaff.StaffQuantity();i++) {
+				Staff s=listStaff.getStaffI(i);
+				if(s instanceof Scientist) {
+					ListProject ListScintistProject = ((Scientist) s).getListScientificProject();
+					Project p2 = ListScintistProject.searchProyect(CodeProject);
+					if(p2!=null) {
+						r=r+"Name: "+s.getName()+", Cost Associate: $"+((Scientist) s).getAssociatedCost()+"\n";
+					}
+				}
+			}
+		}
+		
+		return r;
+		
+	}
+	@Override
+	public boolean reallocateScientificInstallation(
+			String rut, String nameInstallationOld, String nameInstallationNew) {
 		// TODO Auto-generated method stub
 		boolean answer= false;
 		Staff S = listStaff.searchStafft(rut);
@@ -657,6 +831,11 @@ public class SystemSustoImpl implements SystemSusto{
 				ListInstaScientist.deleteInstallation(ISearch);
 				Installation NeWInsta = new Installation(nameInstallationNew);
 				if(ListInstaScientist.enterInstallation(NeWInsta)) {
+					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+					LocalDateTime now = LocalDateTime.now(); 
+					String dateNow = formatter.format(now);						
+					Movement M = new Reallocation(rut,"",dateNow,nameInstallationOld,nameInstallationNew,"","");
+					listMovement.enterMovement(M);
 					answer=true;					
 				}
 			}
@@ -664,4 +843,107 @@ public class SystemSustoImpl implements SystemSusto{
 		
 		return answer;
 	}
+	@Override
+	public String  HoursWorked() throws ParseException{  
+		String r="";
+		for(int i=0;i<listProject.projectQuantity();i++) {
+			
+			Project p = listProject.getProject(i);
+			r=r+"Name Project: "+p.getProjectName()+"\n";
+			
+			 for(int m=0;m<listRegistry.RegistrytQuantity();m++) {
+				 
+				 Registry reg = listRegistry.getRegistryI(m);
+				 String rut = reg.getRut();
+				 Staff se = listStaff.searchStafft(rut);
+				 
+				 if(se instanceof Scientist) {
+					ListProject lSP =  ((Scientist) se).getListScientificProject();
+					Project ps = lSP.searchProyect(p.getProjectCode());
+					if(ps!=null ) {
+						
+						r=r+"  - "+se.getName()+"\n";	
+						String HourIn =  reg.getHourIn();
+						String HourOut =  reg.getHourOut();
+    					boolean horaIng = false;
+    					boolean horaSal = false;
+						
+						try{
+    						LocalTime.parse(HourIn);
+    						LocalTime.parse(HourOut);
+    						horaIng = true;
+    						horaSal = true;
+    					}catch(DateTimeParseException|NullPointerException e){
+    						//ERROR.
+    					}
+    					if(horaIng == true && horaSal == true){
+    						String dateStart = HourIn;
+    						String dateStop = HourOut;
+    						SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+    						Date d1 = null;
+    						Date d2 = null;
+    						try{
+    							d1 = format.parse(dateStart);
+    							d2 = format.parse(dateStop);
+    							long diff = d2.getTime()-d1.getTime();
+    							long diffMinutes = diff/(60*1000)%60;
+    							long diffHours = diff/(60*60*60)%24;
+    							r=r+"           Time to Work:  "+diffHours+" Hours "+diffMinutes+" minutes\n";
+    							
+    						}catch(Exception e){
+    							e.printStackTrace();
+    						}
+    					}
+						
+						
+					}
+				 }
+			 }
+		}
+		
+		return r;    
+    }  	
+	
+	@Override
+	public String Movements() {
+		String r="";
+		for(int i=0;i<listMovement.movementQuantity();i++) {
+			Movement m=listMovement.getMovementI(i);
+			if(m instanceof Reallocation) {
+				String Date = ((Reallocation) m).getDate();
+				r=r+"- Date: "+Date +" , Movement type = Reallocation, Rut:"+m.getRut()+"\n    List Projects: \n";
+				Staff se = listStaff.searchStafft(m.getRut());
+				if(se instanceof Scientist) {
+					ListProject lp=((Scientist) se).getListScientificProject();
+					for(int k=0;k<lp.projectQuantity();k++) {
+						Project p2 = lp.getProject(k);
+						Project p1= listProject.searchProyect(p2.getProjectCode());
+						if(p1!=null) {
+							r=r+"       * "+p1.getProjectName()+"\n";
+						}
+					}//OJOOOOOOOOOOOOOOO
+					
+				}
+				
+			}else if(m instanceof Hiring) {
+				String Date = ((Hiring) m).getDate();
+			
+				r=r+"- Date: "+Date +" , Movement type = Hiring, Rut:"+m.getRut()+"\n    List Projects: \n";
+				Staff se = listStaff.searchStafft(m.getRut());
+				if(se instanceof Scientist) {
+					ListProject lp=((Scientist) se).getListScientificProject();
+					for(int k=0;k<lp.projectQuantity();k++) {
+						Project p2 = lp.getProject(k);
+						Project p1= listProject.searchProyect(p2.getProjectCode());
+						if(p1!=null) {
+							r=r+"       * "+p1.getProjectName()+"\n";
+						}
+					}
+					
+				}
+			}
+		}
+		return r;
+	}
+	
 }
