@@ -141,7 +141,9 @@ public class App {
 	public static boolean loadTXTScientist(SystemSusto System) throws IOException {
 		boolean resp = false;
 		ArchivoEntrada archScientist = new ArchivoEntrada("Scientist.txt");
+		
 		while(!archScientist.isEndFile()){
+			
 			Registro regEnt = archScientist.getRegistro();
 			String Rut = regEnt.getString();
 			String Name = regEnt.getString();
@@ -151,7 +153,9 @@ public class App {
 			int AssociatedCost =  regEnt.getInt();
 			String CodProject = regEnt.getString();
 			resp = System.CreateScientist(Rut, Name, LastName, MotherLastName, Area, AssociatedCost,CodProject);
+
 		}
+		
 		archScientist.close();
 		return resp;
 	}
@@ -175,8 +179,11 @@ public class App {
 		boolean resp1,resp2,resp3,resp4;
 		
 		resp1=loadTXTInstallation(System);
+		
 		resp2=loadTXTProjects(System);
+		
 		resp3=loadTXTScientist(System);
+		
 		resp4 = RegistryScientist(System);
 		
 		if(resp1==true && resp2 ==true && resp3 == true &&  resp4 ==true) {
@@ -517,19 +524,10 @@ public class App {
             op = validateOption();
         }
     }
-	public static void getTxtScientist(SystemSusto System)throws IOException{
-
-	}
-	public static void getTxtProjects(SystemSusto System)throws IOException{
-
-	}
-	public static void getTxtInstallation(SystemSusto System)throws IOException{
-		
-	}
 	public static void toUpdateTXT(SystemSusto System)throws IOException{
-		getTxtScientist(System);
-		getTxtProjects(System);
-		getTxtInstallation(System);
+		System.TXTInstallations();
+		System.TXTProject();
+		System.TXTScientist();
 	}
 	public static void displayMenuReports() {
 		StdOut.println("1.Personnel list\n 2.Project list\n 3.Costs per project\n 4.Hours worked\n 5.Movements\n 6.Exit");
@@ -682,7 +680,6 @@ public class App {
         		StdOut.println(System.toDeployListRegistry());*/
 	        }
 	        toUpdateTXT(System);
-	        
 	}
 	public static void main(String []args) throws IOException, ParseException {
 		StdOut.println("******** Welcome to the SUSTO system ********");

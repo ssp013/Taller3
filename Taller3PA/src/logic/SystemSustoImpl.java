@@ -4,6 +4,7 @@
 package logic;
 import ucn.*;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -151,6 +152,10 @@ public class SystemSustoImpl implements SystemSusto{
 				if(d3!=null) {
 					Department d4 = new Department(department,capacity,budget);
 					listDetpto.enterDepartment(d4);
+				}else {
+					Department d4 = new Department(department,capacity,budget);
+					listDetpto.enterDepartment(d4);
+					listDepartment.enterDepartment(d4);
 				}
 				resp=true;
 			}
@@ -239,6 +244,7 @@ public class SystemSustoImpl implements SystemSusto{
 			}
 		}else {
 			Project p = new Project(ProjectCode,nameProject,budget,DeptoResp,quantityAreas);
+	
 			listProject.enterProject(p);
 			ListDepartment lD = p.getListDepartment();
 			Department d = listDepartment.searchDepartment(DeptoResp);
@@ -296,13 +302,20 @@ public class SystemSustoImpl implements SystemSusto{
 			Staff SN = new Scientist(Rut, Name, LastName, MotherLastName, Area,AssociatedCost);
 			
 			if(SN instanceof Scientist) {
+			
 				ListProject lP = ((Scientist) SN).getListScientificProject();
 				ListInstallation LI = ((Scientist) SN).getlistInstallationScientist();
+				
 				for(int x=0;x<listInstallation.getCantInstallation();x++) {
+					
 					Installation IGlobal = listInstallation.getInstallationI(x);
 					ListDepartment lDInstallation =IGlobal.getlistDepartamentInstalation();
 					Project p = listProject.searchProyect(CodProject);
+					
+					
+					
 					if(p!=null) {
+						//Error, dice q es NULL
 						
 						for(int i=0;i<listDepartment.DepartmentQuantity();i++) {
 							ListProject LPD = listDepartment.getDepartmentI(i).getListProject();
@@ -312,11 +325,12 @@ public class SystemSustoImpl implements SystemSusto{
 								if(DSearchInstallation!=null) {
 									if(listDepartment.getDepartmentI(i).getBudget()>AssociatedCost ) {
 										if(listDepartment.getDepartmentI(i).getDepartmentCapacity()> 0) {
+											
 											listDepartment.getDepartmentI(i).setBudget(	 listDepartment.getDepartmentI(i).getBudget()-AssociatedCost);
 											listDepartment.getDepartmentI(i).setDepartmentCapacity(listDepartment.getDepartmentI(i).getDepartmentCapacity()-1);
 											listStaff.enterStaff(SN);
 											LI.enterInstallation(IGlobal);
-											StdOut.println(p.toString());
+										
 											
 											lP.enterProject(p);
 											resp=true;
@@ -328,6 +342,7 @@ public class SystemSustoImpl implements SystemSusto{
 
 							}
 						}
+					
 					}
 					
 				}
@@ -950,6 +965,82 @@ public class SystemSustoImpl implements SystemSusto{
 			}
 		}
 		return r;
+	}
+	public void TXTScientist() throws IOException{
+		ArchivoSalida archive= new ArchivoSalida("Scientist.txt");
+		for(int i=0;i<listStaff.StaffQuantity();i++){
+			Staff sc1 = listStaff.getStaffI(i);
+			if(sc1!=null) {
+				if(sc1 instanceof Scientist) {
+					ListProject lp = ((Scientist) sc1).getListScientificProject();
+					for(int j=0;j<lp.projectQuantity();j++) {
+						
+						Registro line = new Registro(7);
+						line.agregarCampo(sc1.getRut());
+						line.agregarCampo(sc1.getName());
+						line.agregarCampo(sc1.getLastName());
+						line.agregarCampo(sc1.getMotherLastName());
+						line.agregarCampo(sc1.getArea());
+						line.agregarCampo(((Scientist) sc1).getAssociatedCost());
+						line.agregarCampo(lp.getProject(j).getProjectCode());
+						
+						archive.writeRegistro(line);
+					}	
+					
+				}
+			}
+		}
+		archive.close();
+		
+	}
+	public void TXTProject() throws IOException{
+		ArchivoSalida archive = new ArchivoSalida("Projects.txt");
+		for(int i=0;i<listProject.projectQuantity();i++) {
+			Project p1 = listProject.getProject(i);
+			if(p1!=null) {
+				ListArea la = p1.getListArea();
+				
+					
+						Registro line = new Registro(5+p1.getNumberOfAreasOfExpertise());
+						line.agregarCampo(p1.getProjectCode());
+						line.agregarCampo(p1.getProjectName());
+						line.agregarCampo(p1.getTotalBudget());
+						line.agregarCampo(p1.getResponsibleDepartment());
+						line.agregarCampo(p1.getNumberOfAreasOfExpertise());
+						for(int k=0;k<p1.getNumberOfAreasOfExpertise();k++) {
+							if(la.getAreaI(k).getNameArea() != null) {
+							line.agregarCampo(la.getAreaI(k).getNameArea());
+							}
+						}
+						archive.writeRegistro(line);				
+					
+				
+			}
+		}
+		archive.close();
+	}
+	public void TXTInstallations() throws IOException {
+		ArchivoSalida archive = new ArchivoSalida("Installation.txt");
+		for(int i=0;i<listInstallation.getCantInstallation();i++) {
+			Installation in = listInstallation.getInstallationI(i);
+			if(in!=null) {
+				ListDepartment ld = in.getlistDepartamentInstalation();
+				
+				Registro line = new Registro(5+ld.DepartmentQuantity()*3);
+				line.agregarCampo(in.getNameInstalation());
+				line.agregarCampo(in.getlistDepartamentInstalation().DepartmentQuantity());
+				
+				for(int j=0;j<ld.DepartmentQuantity();j++) {
+					if(ld.getDepartmentI(j).getNameDepartament()!=null) {							
+						line.agregarCampo(in.getlistDepartamentInstalation().getDepartmentI(j).getNameDepartament());
+						line.agregarCampo(in.getlistDepartamentInstalation().getDepartmentI(j).getDepartmentCapacity());
+						line.agregarCampo(in.getlistDepartamentInstalation().getDepartmentI(j).getBudget());
+					}
+				}
+				archive.writeRegistro(line);
+			}
+		}
+		archive.close();
 	}
 	
 }

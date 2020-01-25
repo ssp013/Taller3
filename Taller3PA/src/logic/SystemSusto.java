@@ -75,5 +75,9 @@ public interface SystemSusto {
 	public String toDeployListArea();
 	public String toDeployListRegistry();
 	
+	public void TXTInstallations() throws IOException ;
+	
+	public void TXTProject() throws IOException;
+	public void TXTScientist() throws IOException;
 	
 }

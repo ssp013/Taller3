@@ -80,6 +80,24 @@ public class ListProject {
     	}
     }
     /**
+	 * @param ProjectCode ,The application parameter has an ProjectCode that is used to search a Project.
+	 * @return Search for a Project, in case you find it returns a Project or otherwise, a null.
+	 */
+    
+    public Project searchProyectName(String nameProject) {
+    	int k;
+    	for(k=0;k<cant;k++) {
+    		if(listProject[k].getProjectName().equals(nameProject)) {
+    			break;
+    		}
+    	}
+    	if(k==cant) {
+    		return null;
+    	}else {
+    		return listProject[k];
+    	}
+    }
+    /**
 	 * @param i, The application of this parameter has an to search a Project in the specific location of the list.
 	 * @return a Project returns, in the case that there is the position sought
 	 */
