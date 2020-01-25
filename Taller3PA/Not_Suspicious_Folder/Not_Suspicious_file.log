@@ -1,0 +1,12 @@
+Installation_Name: insta1
+	Project_code_name:01_proyecto1
+		Scientist_Lastname_firstname:  Sanchez_Sebastian
+		Scientist_Lastname_firstname:  Perez_Zulema
+		Scientist_Lastname_firstname:  Sandoval_Tomas
+	Project_code_name:02_proyecto2
+Installation_Name: insta2
+	Project_code_name:03_proyecto3
+Installation_Name: insta3
+	Project_code_name:02_proyecto2
+Installation_Name: insta4
+End_file
