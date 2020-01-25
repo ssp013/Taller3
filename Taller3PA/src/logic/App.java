@@ -672,6 +672,14 @@ public class App {
 	            displayMenu();
 	            StdOut.println("Insert a option:  ");
 	            op = validateOption();
+	            
+        		/*StdOut.println(System.toDeployListProject());
+        		StdOut.println(System.toDeployListArea());
+        		StdOut.println(System.toDeployListDepartment());
+        		StdOut.println(System.toDeployListScientist());
+        		
+        		StdOut.println(System.toDeployListInstallation());
+        		StdOut.println(System.toDeployListRegistry());*/
 	        }
 	        toUpdateTXT(System);
 	        

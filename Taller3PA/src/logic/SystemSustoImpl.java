@@ -316,6 +316,8 @@ public class SystemSustoImpl implements SystemSusto{
 											listDepartment.getDepartmentI(i).setDepartmentCapacity(listDepartment.getDepartmentI(i).getDepartmentCapacity()-1);
 											listStaff.enterStaff(SN);
 											LI.enterInstallation(IGlobal);
+											StdOut.println(p.toString());
+											
 											lP.enterProject(p);
 											resp=true;
 										}
@@ -492,7 +494,7 @@ public class SystemSustoImpl implements SystemSusto{
 		Staff S = new Scientist(Rut,name,lastname,MotherLastName, Area, AssociateCost);
 		
 		
-		//Verificamos el area.
+	
 		for(int k=0;k<n;k++) {
 			
 			String codeProjecto = listProjectScientist[k];
@@ -524,6 +526,10 @@ public class SystemSustoImpl implements SystemSusto{
 						
 										
 										listStaff.enterStaff(S);
+										//add projects:
+										ListProject lp = ((Scientist) S).getListScientificProject();
+										lp.enterProject(p);
+										
 										//New movement:
 					
 									

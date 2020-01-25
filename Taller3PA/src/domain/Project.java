@@ -124,8 +124,6 @@ public class Project{
 	 */
 	@Override
 	public String toString() {
-		return "Project [ProjectCode=" + ProjectCode + ", ProjectName=" + ProjectName + ", TotalBudget=" + TotalBudget
-				+ ", ResponsibleDepartment=" + ResponsibleDepartment + ", NumberOfAreasOfExpertise="
-				+ NumberOfAreasOfExpertise + ", listArea=" + listArea + ", listDepartment=" + listDepartment + "]";
+		return "Project Code"+ProjectCode;
 	}
 }
