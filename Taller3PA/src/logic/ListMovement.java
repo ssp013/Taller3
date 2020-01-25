@@ -58,7 +58,7 @@ public class ListMovement {
 	public Movement searchMovement(String rut, String NameInstallation, String ProjectCode) {
 		int k;
 		for(k=0;k<cant;k++) {
-			if(listMovement[k].getRut().contentEquals(rut)&&listMovement[k].getNameInstallation().equals(NameInstallation)&&listMovement[k].getProjectCode().equals(ProjectCode)) {
+			if(listMovement[k].getRut().contentEquals(rut)) {
 				break;
 			}
 		}
