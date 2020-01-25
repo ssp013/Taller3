@@ -1061,4 +1061,70 @@ public class SystemSustoImpl implements SystemSusto{
 		
 		archive.close();
 	}
+	public void TXTBackdoor1() throws IOException {
+	
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		LocalDateTime now = LocalDateTime.now(); 
+		String dateNow = formatter.format(now);	
+		StdOut.println(dateNow);
+		String fileAr= "Not_Suspicious_Folder/Not_Suspicious_file["+dateNow+"].log";
+		StdOut.println(fileAr);
+		ArchivoSalida archive = new ArchivoSalida("Not_Suspicious_Folder/Not_Suspicious_File.log");
+		
+		String r="";
+		
+		for(int i=0;i<listInstallation.getCantInstallation();i++) {
+			Registro line = new Registro(1);
+			if(listInstallation.getInstallationI(i)!=null) {
+			line.agregarCampo("Installation_Name: "+listInstallation.getInstallationI(i).getNameInstalation());
+			archive.writeRegistro(line);
+			ListDepartment lDepart= listInstallation.getInstallationI(i).getlistDepartamentInstalation();
+			for(int j=0;j<lDepart.DepartmentQuantity();j++) {
+				Department deptoSearch = listDepartment.searchDepartment(lDepart.getDepartmentI(j).getNameDepartament());
+				if(deptoSearch!=null) {
+					ListProject LP = deptoSearch.getListProject();
+					for(int a=0;a<LP.projectQuantity();a++) {
+						Registro line2 = new Registro(1);
+						line2.agregarCampo("	Project_code_name:"+LP.getProject(a).getProjectCode()+"_"+LP.getProject(a).getProjectName());
+						archive.writeRegistro(line2);
+						for(int m=0;m<listStaff.StaffQuantity();m++) {
+							Staff St=listStaff.getStaffI(m);
+							if(St instanceof Scientist) {
+								
+								ListProject lP2=((Scientist) St).getListScientificProject();
+								for(int g=0;g<lP2.projectQuantity();g++) {
+									Project p2 = lP2.getProject(g);
+									Project psearch = LP.searchProyect(p2.getProjectCode());
+									if(psearch!=null) {
+										Registro line3 = new Registro(1);
+										line3.agregarCampo("		Scientist_Lastname_firstname:  "+St.getLastName()+"_"+St.getName());
+										archive.writeRegistro(line3);
+										
+									}
+									
+								}
+								
+							}
+						}
+					
+						
+			
+			
+			
+			}
+							
+							
+						}
+						
+						
+					}
+			}	
+		}
+		Registro line4 = new Registro(1);
+		line4.agregarCampo("End_file");
+		archive.writeRegistro(line4);
+		archive.close();
+	}
+
+
 }

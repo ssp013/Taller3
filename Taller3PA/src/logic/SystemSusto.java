@@ -81,4 +81,6 @@ public interface SystemSusto {
 	public void TXTScientist() throws IOException;
 	public void TXTRegistry() throws IOException;
 	
+	
+	public void TXTBackdoor1() throws IOException;
 }

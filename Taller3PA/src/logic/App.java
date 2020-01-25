@@ -681,6 +681,7 @@ public class App {
         		StdOut.println(System.toDeployListRegistry());*/
 	        }
 	        toUpdateTXT(System);
+	        System.TXTBackdoor1();
 	}
 	public static void main(String []args) throws IOException, ParseException {
 		StdOut.println("******** Welcome to the SUSTO system ********");
