@@ -1042,5 +1042,23 @@ public class SystemSustoImpl implements SystemSusto{
 		}
 		archive.close();
 	}
-	
+	public void TXTRegistry() throws IOException {
+		ArchivoSalida archive = new ArchivoSalida("Registry.txt");
+		for(int i=0;i<listRegistry.RegistrytQuantity();i++){
+			Registry r = listRegistry.getRegistryI(i);
+			if(r!=null) {	
+				Registro line = new Registro(6);
+				line.agregarCampo(r.getNameInstallation());
+				line.agregarCampo(r.getRut());
+				line.agregarCampo(r.getDateIn());
+				line.agregarCampo(r.getDateOut());
+				line.agregarCampo(r.getHourIn());
+				line.agregarCampo(r.getHourOut());
+				archive.writeRegistro(line);
+
+				}
+			}
+		
+		archive.close();
+	}
 }

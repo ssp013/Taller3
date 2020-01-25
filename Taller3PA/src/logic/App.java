@@ -528,6 +528,7 @@ public class App {
 		System.TXTInstallations();
 		System.TXTProject();
 		System.TXTScientist();
+		System.TXTRegistry();
 	}
 	public static void displayMenuReports() {
 		StdOut.println("1.Personnel list\n 2.Project list\n 3.Costs per project\n 4.Hours worked\n 5.Movements\n 6.Exit");

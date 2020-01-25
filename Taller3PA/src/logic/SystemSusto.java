@@ -79,5 +79,6 @@ public interface SystemSusto {
 	
 	public void TXTProject() throws IOException;
 	public void TXTScientist() throws IOException;
+	public void TXTRegistry() throws IOException;
 	
 }
