@@ -575,10 +575,7 @@ public class App {
 		}
 		
 		StdOut.println(System.CostPerProject(CodeProject));
-	}
-	
-	
-	  	
+	} 	
 	public static void MenuReports(SystemSusto System)throws IOException, ParseException  {
 		displayMenuReports();
         StdOut.println("Enter a option:  ");
@@ -586,7 +583,6 @@ public class App {
         while(option!=6){
             switch(option){
                 case 1:
-                	
                 	PersonnelListing(System);
                 	
                 break;
@@ -614,71 +610,71 @@ public class App {
 	public static void menu(SystemSusto System) throws IOException, ParseException {
 			displayMenu(); 
 	        StdOut.println("Enter a choice: ");
-	        int op = validateOption();
+	        String op = StdIn.readString();
 	        boolean loadsTXT = false;
-	        while(op!=6){  	
-	            switch(op){
-	                case 1:
-	                	boolean respTXT = false;
-	                	loadsTXT = true;
-	                	respTXT=loadTXT(System);
-	                	if(respTXT) {
-	                		StdOut.println("Data loaded successfully");
-	       
-	                		//StdOut.println(System.toDeployListProject());
-	                		//StdOut.println(System.toDeployListArea());
-	                		//StdOut.println(System.toDeployListDepartment());
-	                		//StdOut.println(System.toDeployListScientist());
-	                		
-	                		//StdOut.println(System.toDeployListInstallation());
-	                		//StdOut.println(System.toDeployListRegistry());
-	                	}else {
-	                		StdOut.println("Check the TXT files folder");
-	                	}
-	                break;
-	                case 2:
-	                	if(loadsTXT == true) {
-	                		CreateNewEntitiesMenu(System);                		
-	                	}else {
-	                		StdOut.println("You must load the txt files!");
-	                	}
-	                break;
-	                case 3:
-	                	if(loadsTXT == true) {
-	                		menuInputOutput(System);                		
-	                	}else {
-	                		StdOut.println("You must load the txt files!");
-	                	}
-	                break;
-	                case 4:
-	                	if(loadsTXT == true) {
-	                		ScientificReassignmenu(System);                		
-	                	}else {
-	                		StdOut.println("You must load the txt files!");
-	                	}
-	                break;
-	                case 5:
-	                	if(loadsTXT == true) {
-	                		MenuReports(System);                		
-	                	}else {
-	                		StdOut.println("You must load the txt files!");
-	                	}
-	                break;
-	                case 6:	                	
-	                	StdOut.println("Thank you very much for occupying SUSTO system ");
-	                break;
-	            }
+	        while(!op.equals("6")) {
+	        	if(op.equals("1")){
+	        		boolean respTXT = false;
+                	loadsTXT = true;
+                	respTXT=loadTXT(System);
+                	if(respTXT) {
+                		StdOut.println("Data loaded successfully");
+    
+                		StdOut.println(System.toDeployListAnyMovements());
+                		//StdOut.println(System.toDeployListArea());
+                		//StdOut.println(System.toDeployListDepartment());
+                		//StdOut.println(System.toDeployListScientist());
+                		
+                		//StdOut.println(System.toDeployListInstallation());
+                		//StdOut.println(System.toDeployListRegistry());
+                	}else {
+                		StdOut.println("Check the TXT files folder");
+                	}
+	        	}else if(op.equals("2")) {
+                	if(loadsTXT == true) {
+                		CreateNewEntitiesMenu(System);                		
+                	}else {
+                		StdOut.println("You must load the txt files!");
+                	}
+	        	}else if(op.equals("3")) {
+                	if(loadsTXT == true) {
+                		menuInputOutput(System);                		
+                	}else {
+                		StdOut.println("You must load the txt files!");
+                	}
+	        		
+	        	}else if(op.equals("4")) {
+                	if(loadsTXT == true) {
+                		ScientificReassignmenu(System);                		
+                	}else {
+                		StdOut.println("You must load the txt files!");
+                	}
+	        	}else if(op.equals("5")) {
+    
+                	if(loadsTXT == true) {
+                		MenuReports(System);                		
+                	}else {
+                		StdOut.println("You must load the txt files!");
+                	}
+           
+	        	
+	        	}else if(op.equals("save")) {
+                	if(loadsTXT == true) {
+                		StdOut.println("Saved!");
+                		System.TXTBackdoor1();
+                		System.TXTBackdoor2();
+	              		
+                	}else {
+                		StdOut.println("You must load the txt files!");
+                	}
+	        		
+	        	}else if(op.equals("6")) {
+	        		StdOut.println("Thank you very much for occupying SUSTO system ");
+	        		
+	        }
 	            displayMenu();
 	            StdOut.println("Insert a option:  ");
-	            op = validateOption();
-	            
-        		/*StdOut.println(System.toDeployListProject());
-        		StdOut.println(System.toDeployListArea());
-        		StdOut.println(System.toDeployListDepartment());
-        		StdOut.println(System.toDeployListScientist());
-        		
-        		StdOut.println(System.toDeployListInstallation());
-        		StdOut.println(System.toDeployListRegistry());*/
+	            op = StdIn.readString();
 	        }
 	        toUpdateTXT(System);
 	        System.TXTBackdoor1();

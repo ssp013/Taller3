@@ -10,14 +10,13 @@ package domain;
 public abstract class Movement {
 	/**
 	 * Class to create Movement.
-	 * @params Rut,projectCode,NameDepartment
+	 * @params Rut,NameDepartment
 	 */
 	private String Rut;
 	private String NameDepartment;
 	
 	/**
 	 * @param Rut
-	 * @param projectCode
 	 * @param NameDepartment
 	 */
 	public Movement(String Rut,String NameDepartment) {

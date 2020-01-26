@@ -4,6 +4,7 @@
 package logic;
 import ucn.*;
 
+
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -31,8 +32,7 @@ public class SystemSustoImpl implements SystemSusto{
 	private ListArea listArea;
 	private ListMovement listMovement;
 	private ListRegistry listRegistry;
-	
-	
+	private ListAnyMovements listAnyMovements;
 	public SystemSustoImpl() {
 		// TODO Auto-generated constructor stub
 		 listInstallation = new ListInstallation(100);
@@ -42,6 +42,7 @@ public class SystemSustoImpl implements SystemSusto{
 		 listArea = new ListArea(100);
 		 listMovement= new ListMovement(100);
 		 listRegistry= new ListRegistry(100);
+		 listAnyMovements = new ListAnyMovements(100);
 	}
 
 	@Override
@@ -124,6 +125,9 @@ public class SystemSustoImpl implements SystemSusto{
 		// TODO Auto-generated method stub
 		boolean resp = false;
 		//Check if in the List general exist or not.
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		LocalDateTime now = LocalDateTime.now(); 
+		String dateNow = formatter.format(now);	
 		Installation installation = listInstallation.searchInstallation(nameInstallation);		
 		if(installation!=null) {//YESSSS in the list!
 			for(int i=0;i<quantityDpto;i++) {	
@@ -143,6 +147,8 @@ public class SystemSustoImpl implements SystemSusto{
 		}else {
 			Installation insta = new Installation(nameInstallation);
 			listInstallation.enterInstallation(insta);
+			AnyMovements any = new AnyMovements("installation_creation",dateNow);
+			listAnyMovements.enterMovementAny(any);
 			for(int i=0;i<quantityDpto;i++) {	
 				String department = listDepto[i];
 				int capacity= listCapacity[i];
@@ -152,12 +158,15 @@ public class SystemSustoImpl implements SystemSusto{
 				if(d3!=null) {
 					Department d4 = new Department(department,capacity,budget);
 					listDetpto.enterDepartment(d4);
+					resp=true;
 				}else {
 					Department d4 = new Department(department,capacity,budget);
 					listDetpto.enterDepartment(d4);
 					listDepartment.enterDepartment(d4);
+					resp = true;
 				}
-				resp=true;
+				
+				
 			}
 		}
 		return resp;
@@ -204,7 +213,12 @@ public class SystemSustoImpl implements SystemSusto{
 		}else {
 			Department newDepto = new Department(nameDpto,Capacity,budget);
 			if(listDepartment.enterDepartment(newDepto)) {
-				resp=true;
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+				LocalDateTime now = LocalDateTime.now(); 
+				String dateNow = formatter.format(now);	
+	
+				resp = true;
+			
 			}
 		}
 
@@ -276,7 +290,6 @@ public class SystemSustoImpl implements SystemSusto{
 		return resp;
 		
 	}
-
 	@Override
 	public boolean CreateAreas(String nameArea) {
 		// TODO Auto-generated method stub
@@ -382,11 +395,11 @@ public class SystemSustoImpl implements SystemSusto{
 		}
 		return resp;
 	}
-	
 	@Override
 	public boolean RegistryScientist(String nameInstallation,String Rut,String DateIn, String DateOut,String HourIn, String HourOut) {
 		Registry R = new Registry(nameInstallation, Rut, DateIn, DateOut, HourIn, HourOut);
 		listRegistry.enterRegistry(R);
+	
 		Staff SC = listStaff.searchStafft(Rut);
 		if(SC != null && SC instanceof Scientist) {
 			ListRegistry LR = ((Scientist) SC).getListRegistry();
@@ -426,6 +439,11 @@ public class SystemSustoImpl implements SystemSusto{
 											//Si es la misma instalación, distitno fecha y hora.. lo agrego el nuevo registro.
 											Registry re = new Registry(installation,Rut,dateIn,timeIn,dateOut,timeOut);
 											listRegistry.enterRegistry(re);
+											DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+											LocalDateTime now = LocalDateTime.now(); 
+											String dateNow = formatter.format(now);		
+											/*AnyMovements any = new AnyMovements("check-in",dateNow);
+											listAnyMovements.enterMovementAny(any);*/
 											resp=true;
 											
 										}
@@ -481,7 +499,12 @@ public class SystemSustoImpl implements SystemSusto{
 										&&     Date2.equals(dateOut)) {
 											//StdOut.println("Dale\n");
 											LR.getRegistryI(i).setDateOut(dateOut);
-											LR.getRegistryI(i).setHourOut(timeOut);;
+											LR.getRegistryI(i).setHourOut(timeOut);
+											DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+											LocalDateTime now = LocalDateTime.now(); 
+											String dateNow = formatter.format(now);		
+											/*AnyMovements any = new AnyMovements("check-out",dateNow);
+											listAnyMovements.enterMovementAny(any);*/
 											resp=true;
 											
 										}
@@ -555,9 +578,10 @@ public class SystemSustoImpl implements SystemSusto{
 										
 										Movement M = new Hiring(Rut,department,dateNow,installation);
 										listMovement.enterMovement(M);
-										Installation ins = new Installation(installation);
+										Installation ins = new Installation(installation);	
+										/*AnyMovements any = new AnyMovements("scientist_hiring",dateNow);
+										resp = listAnyMovements.enterMovement(any);*/
 										
-										resp=true;
 										if(LI.searchInstallation(installation)==null) {
 											LI.enterInstallation(ins);
 										}
@@ -571,97 +595,15 @@ public class SystemSustoImpl implements SystemSusto{
 		}
 		return resp;
 	}
-	
-	public String toDeployListProject() {
-		String r ="";
-		for(int i=0;i<listProject.projectQuantity();i++) {
-			Project p = listProject.getProject(i);
-			r=r+"Name: "+p.getProjectName()+"\n";
-			r=r+"List Department:\n";
-			ListDepartment ld = p.getListDepartment();
-			for(int j=0;j<ld.DepartmentQuantity();j++) {
-				r=r+"   - "+ld.getDepartmentI(j).getNameDepartament()+"\n";
-				ListProject lPE =ld.getDepartmentI(j).getListProject();
-				for(int m=0;m<lPE.projectQuantity();m++) {
-					Project p1= lPE.getProject(m);
-					Project p3 = listProject.searchProyect(p1.getProjectCode());
-					if(p3!=null) {
-						r=r+"        * "+ld.getDepartmentI(j).getNameDepartament()+"\n";
-					}
-				}
-			}
-		}
-		return r;
-	}
-	public String toDeployListDepartment() {
-		String r ="";
-		for(int i=0;i<listDepartment.DepartmentQuantity();i++) {
-			
-			
-			Department d=  listDepartment.getDepartmentI(i);
-			r=r+"Name Department: "+d.getNameDepartament()+", Department Capacity: "+d.getDepartmentCapacity()+", Budget: "+d.getBudget()+"\n ListProject:\n";
-			ListProject LP = d.getListProject();
-			for(int j=0;j<LP.projectQuantity();j++) {
-				r=r+LP.getProject(j).getProjectCode()+"\n";
-			}
-		}
-			return r;
-	}
-	public String toDeployListScientist() {
-		String r ="";	
 
-		
-		
-		for(int i=0;i<listStaff.StaffQuantity();i++) {
-			
-			if(listStaff.getStaffI(i) instanceof Scientist) {
-				Scientist s = (Scientist) listStaff.getStaffI(i);
-				r=r+"Scientist [Rut=" + s.getRut() + ", Name=" + s.getName() + ", LastName=" + s.getLastName() + ", MotherLastName="
-						+ s.getMotherLastName() + ", Area=" + s.getArea() + ", AssociatedCost=" + s.getAssociatedCost()+"\n ListProject:\n";
-				ListProject lp= s.getListScientificProject();
-				for(int k=0;k<lp.projectQuantity();k++) {
-					Project p =lp.getProject(k);
-					r=r+"Code"+p.getProjectCode()+"\n" ;
-					
-				}
-				ListInstallation lInsta= s.getlistInstallationScientist();
-				r=r+"List Installation:\n";
-				for(int k=0;k<lInsta.getCantInstallation();k++) {
-					 lInsta.getInstallationI(k).getNameInstalation();
-					r=r+"Name Installation: "+lInsta.getInstallationI(k).getNameInstalation()+"\n" ;
-					
-				}
-			}
-				
-			}	
-		return r;
-		}
-	public String toDeployListRegistry() {
-		String r ="";		
-		for(int k=0;k<listRegistry.RegistrytQuantity();k++) {
-			r=r+listRegistry.getRegistryI(k).toString()+"\n";
-		}
-		return r;
-	}
-	public String toDeployListInstallation() {
+
+
+	public String toDeployListAnyMovements() {
 		String r ="";
-		for(int i=0;i<listInstallation.getCantInstallation();i++) {
-			r=r+listInstallation.getInstallationI(i).getNameInstalation()+"\n";
-			
-			ListDepartment ld = listInstallation.getInstallationI(i).getlistDepartamentInstalation();
-			r=r+" List Department:\n ";
-			for(int k=0;k<ld.DepartmentQuantity();k++) {
-				r=r+ld.getDepartmentI(k).getNameDepartament()+"\n";
-			}
-			
-		}
-		return r;
-	}
-	public String toDeployListArea() {
-		String r ="";
-		for(int i=0;i<listArea.areaQuantity();i++) {
-			r=r+listArea.getAreaI(i).toString()+"\n";
-		}
+		for(int i=0;i<listAnyMovements.AnyMovementQuantity();i++) {
+			if(listAnyMovements.getAnyMovementI(i)!=null) {
+			r=r+listAnyMovements.getAnyMovementI(i).getMovementName()+" -> "+listAnyMovements.getAnyMovementI(i).getData_of_the_movement()+"\n";
+		}}
 		return r;
 	}
 	@Override
@@ -697,7 +639,9 @@ public class SystemSustoImpl implements SystemSusto{
 						
 							
 							Movement M = new Reallocation(rut,dep.getNameDepartament(),dateNow,"","",codOld,codNew);
-							listMovement.enterMovement(M);
+							listMovement.enterMovement(M);	
+							/*AnyMovements any = new AnyMovements("scientist_re-assign",dateNow);
+							listAnyMovements.enterMovementAny(any);*/
 
 							
 							
@@ -857,6 +801,9 @@ public class SystemSustoImpl implements SystemSusto{
 					String dateNow = formatter.format(now);						
 					Movement M = new Reallocation(rut,"",dateNow,nameInstallationOld,nameInstallationNew,"","");
 					listMovement.enterMovement(M);
+									
+					/*AnyMovements any = new AnyMovements("scientist_re-assign",dateNow);
+					listAnyMovements.enterMovementAny(any);*/
 					answer=true;					
 				}
 			}
@@ -924,7 +871,6 @@ public class SystemSustoImpl implements SystemSusto{
 		
 		return r;    
     }  	
-	
 	@Override
 	public String Movements() {
 		String r="";
@@ -1063,15 +1009,20 @@ public class SystemSustoImpl implements SystemSusto{
 	}
 	public void TXTBackdoor1() throws IOException {
 	
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd");
 		LocalDateTime now = LocalDateTime.now(); 
-		String dateNow = formatter.format(now);	
-		StdOut.println(dateNow);
-		String fileAr= "Not_Suspicious_Folder/Not_Suspicious_file["+dateNow+"].log";
-		StdOut.println(fileAr);
-		ArchivoSalida archive = new ArchivoSalida("Not_Suspicious_Folder/Not_Suspicious_File.log");
+		String day = formatter.format(now);	
+		DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("MM");
+		String month = formatter2.format(now);
+		DateTimeFormatter formatter3 = DateTimeFormatter.ofPattern("yyyy");
+		String year = formatter3.format(now);
 		
-		String r="";
+		String dateNow = day+"-"+month+"-"+year ;
+		
+		String fileAr= "Not_Suspicious_Folder/Not_Suspicious_file["+dateNow+"].log";
+		
+		ArchivoSalida archive = new ArchivoSalida(fileAr);
+		
 		
 		for(int i=0;i<listInstallation.getCantInstallation();i++) {
 			Registro line = new Registro(1);
@@ -1108,7 +1059,7 @@ public class SystemSustoImpl implements SystemSusto{
 						}
 					
 						
-			
+	
 			
 			
 			}
@@ -1125,6 +1076,32 @@ public class SystemSustoImpl implements SystemSusto{
 		archive.writeRegistro(line4);
 		archive.close();
 	}
-
-
+	public void TXTBackdoor2() throws IOException {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd");
+		LocalDateTime now = LocalDateTime.now(); 
+		String day = formatter.format(now);	
+		DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("MM");
+		String month = formatter2.format(now);
+		DateTimeFormatter formatter3 = DateTimeFormatter.ofPattern("yyyy");
+		String year = formatter3.format(now);
+		
+		String dateNow = day+"-"+month+"-"+year ;
+	
+		String fileAr= "Not_Suspicious_Folder/Not_Suspicious_register_["+dateNow+"].log";
+		
+		ArchivoSalida archive = new ArchivoSalida(fileAr);
+	
+		
+		for(int j=0;j<listAnyMovements.AnyMovementQuantity();j++) {
+			
+			if(listAnyMovements.getAnyMovementI(j)!=null) {
+				Registro line1 = new Registro(1);
+				StdOut.println(listAnyMovements.getAnyMovementI(j).getMovementName());
+				line1.agregarCampo(listAnyMovements.getAnyMovementI(j).getMovementName()+"->"+listAnyMovements.getAnyMovementI(j).getData_of_the_movement());
+				archive.writeRegistro(line1);
+			}
+			
+		}
+		archive.close();
+	}
 }
