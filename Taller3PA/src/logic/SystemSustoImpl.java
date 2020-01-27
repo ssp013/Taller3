@@ -42,7 +42,7 @@ public class SystemSustoImpl implements SystemSusto{
 		 listArea = new ListArea(100);
 		 listMovement= new ListMovement(100);
 		 listRegistry= new ListRegistry(100);
-		 listAnyMovements = new ListAnyMovements(100);
+		 listAnyMovements = new ListAnyMovements(400);
 	}
 
 	@Override
@@ -608,17 +608,6 @@ public class SystemSustoImpl implements SystemSusto{
 		}
 		return resp;
 	}
-
-
-
-	public String toDeployListAnyMovements() {
-		String r ="";
-		for(int i=0;i<listAnyMovements.AnyMovementQuantity();i++) {
-			if(listAnyMovements.getAnyMovementI(i)!=null) {
-			r=r+listAnyMovements.getAnyMovementI(i).getMovementName()+" -> "+listAnyMovements.getAnyMovementI(i).getData_of_the_movement()+"\n";
-		}}
-		return r;
-	}
 	@Override
 	public boolean reallocateScientificProject(String rut, String codOld, String codNew) {
 		// TODO Auto-generated method stub
@@ -671,10 +660,10 @@ public class SystemSustoImpl implements SystemSusto{
 	@Override
 	public String displayListPersonalInstallationPrint() {
 		String r="";
-		r=r+"********** List of personnel by installation *********\n";
+		r=r+"********** Listado de personal por instalación *********\n";
 		for(int i=0;i<listInstallation.getCantInstallation();i++) {
-			r=r+"Name: "+listInstallation.getInstallationI(i).getNameInstalation()+"\n";
-			r=r+"List departments: \n";
+			r=r+"Nombre : "+listInstallation.getInstallationI(i).getNameInstalation()+"\n";
+			r=r+"Listado de departamentos : \n";
 			ListDepartment lDepart= listInstallation.getInstallationI(i).getlistDepartamentInstalation();
 			for(int j=0;j<lDepart.DepartmentQuantity();j++) {
 					Department deptoSearch = listDepartment.searchDepartment(lDepart.getDepartmentI(j).getNameDepartament());
@@ -714,11 +703,11 @@ public class SystemSustoImpl implements SystemSusto{
 	@Override
 	public String displayListPersonalDepartmentPrint() {
 		String r="";
-		r=r+"********** List of personnel by department *********\n";		
+		r=r+"********** Listado de personal por departamento *********\n";		
 			for(int j=0;j<listDepartment.DepartmentQuantity();j++) {
 					Department deptoSearch = listDepartment.searchDepartment(listDepartment.getDepartmentI(j).getNameDepartament());
 					if(deptoSearch!=null) {
-						r=r+"Name Department: "+deptoSearch.getNameDepartament()+"\n";
+						r=r+"Nombre departamento : "+deptoSearch.getNameDepartament()+"\n";
 						ListProject LP = deptoSearch.getListProject();
 						
 						for(int a=0;a<LP.projectQuantity();a++) {
@@ -752,7 +741,7 @@ public class SystemSustoImpl implements SystemSusto{
 	@Override 
 	public String displayprojectListing() {
 		String r="";
-		r=r+"********** Listining Project *********\n";	
+		r=r+"********** Listado de proyectos *********\n";	
 		for(int l=0;l<listProject.projectQuantity();l++) {
 			r=r+" *"+listProject.getProject(l).getProjectName()+"\n";
 			for(int i=0;i<listStaff.StaffQuantity();i++) {
@@ -778,16 +767,16 @@ public class SystemSustoImpl implements SystemSusto{
 		String r="";
 		Project p= listProject.searchProyect(CodeProject);
 		if(p!=null) {
-			r=r+"Name: "+p.getProjectName()+", Budget: $"+p.getTotalBudget()+"\n";
+			r=r+"Nombre : "+p.getProjectName()+",Presupuesto: $"+p.getTotalBudget()+"\n";
 			
-			r=r+"List Scientist:\n";
+			r=r+"Lista cientificos :\n";
 			for(int i=0;i<listStaff.StaffQuantity();i++) {
 				Staff s=listStaff.getStaffI(i);
 				if(s instanceof Scientist) {
 					ListProject ListScintistProject = ((Scientist) s).getListScientificProject();
 					Project p2 = ListScintistProject.searchProyect(CodeProject);
 					if(p2!=null) {
-						r=r+"Name: "+s.getName()+", Cost Associate: $"+((Scientist) s).getAssociatedCost()+"\n";
+						r=r+"Nombre: "+s.getName()+", Costo asociado : $"+((Scientist) s).getAssociatedCost()+"\n";
 					}
 				}
 			}
@@ -830,7 +819,7 @@ public class SystemSustoImpl implements SystemSusto{
 		for(int i=0;i<listProject.projectQuantity();i++) {
 			
 			Project p = listProject.getProject(i);
-			r=r+"Name Project: "+p.getProjectName()+"\n";
+			r=r+"Nombre proyecto: "+p.getProjectName()+"\n";
 			
 			 for(int m=0;m<listRegistry.RegistrytQuantity();m++) {
 				 
@@ -869,7 +858,7 @@ public class SystemSustoImpl implements SystemSusto{
     							long diff = d2.getTime()-d1.getTime();
     							long diffMinutes = diff/(60*1000)%60;
     							long diffHours = diff/(60*60*60)%24;
-    							r=r+"           Time to Work:  "+diffHours+" Hours "+diffMinutes+" minutes\n";
+    							r=r+"           Tiempo de trabajo:  "+diffHours+" horas "+diffMinutes+" minutos\n";
     							
     						}catch(Exception e){
     							e.printStackTrace();
@@ -891,7 +880,7 @@ public class SystemSustoImpl implements SystemSusto{
 			Movement m=listMovement.getMovementI(i);
 			if(m instanceof Reallocation) {
 				String Date = ((Reallocation) m).getDate();
-				r=r+"- Date: "+Date +" , Movement type = Reallocation, Rut:"+m.getRut()+"\n    List Projects: \n";
+				r=r+"- Fecha: "+Date +" , Tipo de movimiento = Reasignar, Rut:"+m.getRut()+"\n    Lista de proyectos: \n";
 				Staff se = listStaff.searchStafft(m.getRut());
 				if(se instanceof Scientist) {
 					ListProject lp=((Scientist) se).getListScientificProject();
@@ -901,14 +890,14 @@ public class SystemSustoImpl implements SystemSusto{
 						if(p1!=null) {
 							r=r+"       * "+p1.getProjectName()+"\n";
 						}
-					}//OJOOOOOOOOOOOOOOO
+					}
 					
 				}
 				
 			}else if(m instanceof Hiring) {
 				String Date = ((Hiring) m).getDate();
 			
-				r=r+"- Date: "+Date +" , Movement type = Hiring, Rut:"+m.getRut()+"\n    List Projects: \n";
+				r=r+"- Fecha: "+Date +" , Tipo de movimiento = Contratar, Rut:"+m.getRut()+"\n    Lista de proyectos: \n";
 				Staff se = listStaff.searchStafft(m.getRut());
 				if(se instanceof Scientist) {
 					ListProject lp=((Scientist) se).getListScientificProject();

@@ -127,8 +127,8 @@ public interface SystemSusto {
 	//Precondition:
 	//Postcondition:
 	public void TXTBackdoor2() throws IOException;
-	//Description: Create an output file with the list of a names installations, code and names of projects  and the name and last name of the scientists
+	//Description: Create an output file with the list of a any movements in the system
 	//Precondition:
 	//Postcondition:
-	public String toDeployListAnyMovements();
+	
 }
