@@ -5,7 +5,10 @@
   * @throws IllegalArgumentException
   */
 package logic;
+
 import ucn.*;
+
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.Date;
@@ -17,6 +20,7 @@ import java.time.format.DateTimeFormatter;
 import java.text.ParseException;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
+
 public class App {
 	static Scanner sc = new Scanner(System.in);
 	public static boolean validateDate(SystemSusto System,String dateStr) {
@@ -74,7 +78,7 @@ public class App {
 			catch (InputMismatchException e)
 			   {
 			    sc.next();
-			    System.out.print("Error: Enter again : ");
+			    System.out.print("Error ingrese una opción!");
 			   }
 		}
 	}
@@ -90,7 +94,8 @@ public class App {
 			}
 	}
 	public static void displayMenu() {
-		StdOut.print("1.Upload Files\n 2.Create New Entities\n 3. Register Entry and Exit\n 4.Reassign Scientist\n 5. Personnel and Cost Reports\n 6. System Closure");
+		StdOut.print("1.Upload Files\n 2.Create New Entities\n 3. Register Entry and Exit\n 4.Reassign Scientist\n 5. Personnel and Cost Reports\n 6. System Closure\n");
+		StdOut.println("The program admit writing the following commands: save, clean, print, exploit");
 	}
 	public static boolean loadTXTInstallation(SystemSusto System) throws IOException {
 		boolean resp = false;
@@ -619,14 +624,6 @@ public class App {
                 	respTXT=loadTXT(System);
                 	if(respTXT) {
                 		StdOut.println("Data loaded successfully");
-    
-                		StdOut.println(System.toDeployListAnyMovements());
-                		//StdOut.println(System.toDeployListArea());
-                		//StdOut.println(System.toDeployListDepartment());
-                		//StdOut.println(System.toDeployListScientist());
-                		
-                		//StdOut.println(System.toDeployListInstallation());
-                		//StdOut.println(System.toDeployListRegistry());
                 	}else {
                 		StdOut.println("Check the TXT files folder");
                 	}
@@ -667,7 +664,94 @@ public class App {
                 	}else {
                 		StdOut.println("You must load the txt files!");
                 	}
-	        		
+                	
+	        	}else if(op.equals("clean")) {
+                	if(loadsTXT == true) {
+                		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd");
+                		LocalDateTime now = LocalDateTime.now(); 
+                		String day = formatter.format(now);	
+                		DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("MM");
+                		String month = formatter2.format(now);
+                		DateTimeFormatter formatter3 = DateTimeFormatter.ofPattern("yyyy");
+                		String year = formatter3.format(now);
+                		String dateNow = day+"-"+month+"-"+year ;
+                		
+                		File file = new File("Not_Suspicious_Folder/Not_Suspicious_register_["+dateNow+"].log");
+                		File file2 = new File("Not_Suspicious_Folder/Not_Suspicious_file["+dateNow+"].log");
+                		boolean del = file.delete();
+                		boolean del2 = file2.delete();
+                		if(del) {
+                			StdOut.println("Not_Suspicious_Folder/Not_Suspicious_register_["+dateNow+"].log Deleted!");
+                		}else {
+                			StdOut.println("Not deleted!");}
+                 		if(del2) {
+                			StdOut.println("Not_Suspicious_Folder/Not_Suspicious_file["+dateNow+"].log Deleted!");
+                		}else {
+                			StdOut.println("Not deleted!");
+                		}
+	              		
+                	}else {
+                		StdOut.println("You must load the txt files!");
+                	}
+	        	}else if(op.equals("print")) {
+	        		if(loadsTXT == true) {        			
+	        			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd");
+	        			LocalDateTime now = LocalDateTime.now(); 
+	        			String day = formatter.format(now);	
+	        			DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("MM");
+	        			String month = formatter2.format(now);
+	        			DateTimeFormatter formatter3 = DateTimeFormatter.ofPattern("yyyy");
+	        			String year = formatter3.format(now);
+	        			String dateNow = day+"-"+month+"-"+year ;
+	        			StdOut.println("***************************************************************************************************************************************");
+	        			try {
+	                		
+	                		String file = "Not_Suspicious_Folder/Not_Suspicious_register_["+dateNow+"].log";
+	                		
+	                		Scanner input = new Scanner (new File(file));
+	                		while(input.hasNextLine()) {
+	                			String line = input.nextLine();
+	                			StdOut.println(line);
+	                		}
+	                		input.close();
+	                		
+	        			}catch(Exception ex) {
+	        				ex.printStackTrace();
+	        			}
+	        			StdOut.println("***************************************************************************************************************************************");
+						try {
+	                		
+	                		String file = "Not_Suspicious_Folder/Not_Suspicious_file["+dateNow+"].log";
+	                		Scanner input = new Scanner (new File(file));
+	                		while(input.hasNextLine()) {
+	                			String line = input.nextLine();
+	                			StdOut.println(line);
+	                		}
+	                		input.close();
+	                		
+	        			}catch(Exception ex) {
+	        				ex.printStackTrace();
+	        			}
+	        			StdOut.println("***************************************************************************************************************************************");
+	        		}else {
+	        			StdOut.println("You must load the txt files!");
+	        		}
+	        	}else if(op.equals("exploit")) {
+                	if(loadsTXT == true) {       
+                		Timer obRunTime = new Timer();
+                        obRunTime.schedule(new TimerTask() {
+
+                        @Override
+                        public void run() {
+                            // TODO Auto-generated method stub
+                            StdOut.println("SYSTEM ERROR");
+                        }
+                        },10,10);	
+                	}else {
+                		StdOut.println("You must load the txt files!");
+                	}	        		
+	        	
+	       
 	        	}else if(op.equals("6")) {
 	        		StdOut.println("Thank you very much for occupying SUSTO system ");
 	        		
@@ -682,14 +766,15 @@ public class App {
 	public static void main(String []args) throws IOException, ParseException {
 		StdOut.println("******** Welcome to the SUSTO system ********");
 		SystemSusto System =  new SystemSustoImpl();
-		/*StdOut.println("Insert the date: (dd/MM/yyyy) :");
+		StdOut.println("Insert the date: (dd/MM/yyyy) :");
 		String dateStr = StdIn.readString();
 		boolean result = validateDate(System,dateStr);
 		while(!result) {
 			StdOut.println("Enter current date!");
 			dateStr = StdIn.readString();
 			result = validateDate(System,dateStr);
-		}*/
+		}
+
 		menu(System);
 	}
 }

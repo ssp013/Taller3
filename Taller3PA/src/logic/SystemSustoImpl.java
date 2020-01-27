@@ -216,7 +216,8 @@ public class SystemSustoImpl implements SystemSusto{
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 				LocalDateTime now = LocalDateTime.now(); 
 				String dateNow = formatter.format(now);	
-	
+				AnyMovements M = new AnyMovements("department_creation",dateNow);
+				listAnyMovements.enterMovementAny(M);
 				resp = true;
 			
 			}
@@ -399,11 +400,23 @@ public class SystemSustoImpl implements SystemSusto{
 	public boolean RegistryScientist(String nameInstallation,String Rut,String DateIn, String DateOut,String HourIn, String HourOut) {
 		Registry R = new Registry(nameInstallation, Rut, DateIn, DateOut, HourIn, HourOut);
 		listRegistry.enterRegistry(R);
-	
+		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		LocalDateTime now = LocalDateTime.now(); 
+		String dateNow = formatter.format(now);	
+		if(DateOut.equals("") && HourOut.equals("")){
+			AnyMovements any = new AnyMovements("check-in",DateOut);
+			listAnyMovements.enterMovementAny(any);
+		}else {
+			AnyMovements any = new AnyMovements("check-out",DateOut);
+			listAnyMovements.enterMovementAny(any);
+		}
 		Staff SC = listStaff.searchStafft(Rut);
 		if(SC != null && SC instanceof Scientist) {
 			ListRegistry LR = ((Scientist) SC).getListRegistry();
+			
 			LR.enterRegistry(R);
+			
 		}
 		return true;
 	}
@@ -442,13 +455,13 @@ public class SystemSustoImpl implements SystemSusto{
 											DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 											LocalDateTime now = LocalDateTime.now(); 
 											String dateNow = formatter.format(now);		
-											/*AnyMovements any = new AnyMovements("check-in",dateNow);
-											listAnyMovements.enterMovementAny(any);*/
+											AnyMovements any = new AnyMovements("check-in",dateNow);
+											listAnyMovements.enterMovementAny(any);
 											resp=true;
 											
 										}
 									}
-							}
+								}
 					
 								
 								
@@ -480,7 +493,7 @@ public class SystemSustoImpl implements SystemSusto{
 							Installation insta = listInstallation.getInstallationI(a);
 							Department d2= insta.getlistDepartamentInstalation().searchDepartment(d.getNameDepartament());
 							if(d2!=null  ) {
-								//StdOut.println("Dale\n");
+						
 								//Esta en la installation ese departamento..
 								//Ese proyecto pertenece a ese insta, depto, !
 								if(installation.equals(insta.getNameInstalation())) {
@@ -503,8 +516,8 @@ public class SystemSustoImpl implements SystemSusto{
 											DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 											LocalDateTime now = LocalDateTime.now(); 
 											String dateNow = formatter.format(now);		
-											/*AnyMovements any = new AnyMovements("check-out",dateNow);
-											listAnyMovements.enterMovementAny(any);*/
+											AnyMovements any = new AnyMovements("check-out",dateNow);
+											listAnyMovements.enterMovementAny(any);
 											resp=true;
 											
 										}
@@ -579,9 +592,9 @@ public class SystemSustoImpl implements SystemSusto{
 										Movement M = new Hiring(Rut,department,dateNow,installation);
 										listMovement.enterMovement(M);
 										Installation ins = new Installation(installation);	
-										/*AnyMovements any = new AnyMovements("scientist_hiring",dateNow);
-										resp = listAnyMovements.enterMovement(any);*/
-										
+										AnyMovements any = new AnyMovements("scientist_hiring",dateNow);
+										listAnyMovements.enterMovementAny(any);
+										resp=true;
 										if(LI.searchInstallation(installation)==null) {
 											LI.enterInstallation(ins);
 										}
@@ -640,8 +653,8 @@ public class SystemSustoImpl implements SystemSusto{
 							
 							Movement M = new Reallocation(rut,dep.getNameDepartament(),dateNow,"","",codOld,codNew);
 							listMovement.enterMovement(M);	
-							/*AnyMovements any = new AnyMovements("scientist_re-assign",dateNow);
-							listAnyMovements.enterMovementAny(any);*/
+							AnyMovements any = new AnyMovements("scientist_re-assign",dateNow);
+							listAnyMovements.enterMovementAny(any);
 
 							
 							
@@ -802,8 +815,8 @@ public class SystemSustoImpl implements SystemSusto{
 					Movement M = new Reallocation(rut,"",dateNow,nameInstallationOld,nameInstallationNew,"","");
 					listMovement.enterMovement(M);
 									
-					/*AnyMovements any = new AnyMovements("scientist_re-assign",dateNow);
-					listAnyMovements.enterMovementAny(any);*/
+					AnyMovements any = new AnyMovements("scientist_re-assign",dateNow);
+					listAnyMovements.enterMovementAny(any);
 					answer=true;					
 				}
 			}
@@ -1096,7 +1109,6 @@ public class SystemSustoImpl implements SystemSusto{
 			
 			if(listAnyMovements.getAnyMovementI(j)!=null) {
 				Registro line1 = new Registro(1);
-				StdOut.println(listAnyMovements.getAnyMovementI(j).getMovementName());
 				line1.agregarCampo(listAnyMovements.getAnyMovementI(j).getMovementName()+"->"+listAnyMovements.getAnyMovementI(j).getData_of_the_movement());
 				archive.writeRegistro(line1);
 			}

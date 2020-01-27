@@ -46,7 +46,7 @@ public class ListAnyMovements {
 	 * @return a Movement returns, in the case that there is the position sought
 	 */
 	public AnyMovements getAnyMovementI(int i) {
-		if (i<=0 && i<cant) {
+		if (i>=0 && i<cant) {
 			return listAnyMovements[i];
 		}else {
 			return null;
@@ -76,7 +76,7 @@ public class ListAnyMovements {
 	 * @return returns the movements quantity
 	 */
 	public int AnyMovementQuantity() {
-		return cant;
+		return this.cant;
 	}
 	@Override
 	public String toString() {

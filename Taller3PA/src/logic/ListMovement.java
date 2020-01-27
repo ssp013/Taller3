@@ -45,7 +45,7 @@ public class ListMovement {
 	 * @return a Movement returns, in the case that there is the position sought
 	 */
 	public Movement getMovementI(int i) {
-		if (i<=0 && i<cant) {
+		if (i>=0 && i<cant) {
 			return listMovement[i];
 		}else {
 			return null;
